@@ -165,6 +165,15 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
             backgroundColor: "#0a0a0a",
             borderRight: "1px solid #1f2937",
           },
+          /* Override one-dark + global ::selection so highlights stay readable on black */
+          "&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground":
+            {
+              backgroundColor: "rgba(56, 189, 248, 0.22)",
+            },
+          ".cm-content ::selection": {
+            backgroundColor: "rgba(56, 189, 248, 0.32)",
+            color: "#f1f5f9",
+          },
         },
         { dark: true },
       ),
