@@ -50,10 +50,7 @@ export function HeaderDate() {
   );
 
   return (
-    <div className="relative flex items-center gap-1.5">
-      <span className="material-symbols-outlined text-[14px] text-on-surface-variant" aria-hidden>
-        calendar_today
-      </span>
+    <div className="relative -mt-0.5 flex items-center">
       <input
         className="absolute inset-0 cursor-pointer opacity-0"
         type="date"
