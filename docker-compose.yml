@@ -1,0 +1,12 @@
+services:
+  the-brief:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      BRIEF_DATA_DIR: /data
+    volumes:
+      # Host folder with Story Frame *.json files (see PRD)
+      - ./web/data:/data:ro

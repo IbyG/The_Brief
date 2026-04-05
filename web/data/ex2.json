@@ -1,0 +1,26 @@
+{
+  "rank": 2,
+  "headline": "OpenAI Shuts Down Sora",
+  "date_confirmed": "2026-03-24",
+  "sources_confirmed": ["CNN", "TechCrunch", "Bloomberg"],
+  "summary": "OpenAI ended the Sora consumer experiment; licensing and roadmap shift toward core models.",
+  "sections": [
+    {
+      "id": "what-happened",
+      "type": "bullet_list",
+      "title": "What Happened",
+      "items": [
+        { "text": "OpenAI shut down the Sora standalone app and API." },
+        { "text": "The shutdown canceled a major Disney licensing deal." }
+      ]
+    },
+    {
+      "id": "why-it-matters",
+      "type": "bullet_list",
+      "title": "Why It Matters",
+      "items": [
+        { "text": "It suggests AI video generation may not yet have strong consumer demand." }
+      ]
+    }
+  ]
+}

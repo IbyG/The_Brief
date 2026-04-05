@@ -75,18 +75,12 @@
       },
       {
         "id": "analysis",
-        "type": "rich_text",
+        "type": "generic",
         "title": "Analysis",
         "items": [
           {
-            "_type": "block",
-            "style": "normal",
-            "children": [
-              { "_type": "span", "text": "This shift suggests OpenAI is prioritizing ", "marks": [] },
-              { "_type": "span", "text": "higher-value compute workloads", "marks": ["strong"] },
-              { "_type": "span", "text": " over consumer video products.", "marks": [] }
-            ],
-            "markDefs": []
+            "kind": "text",
+            "text": "This shift suggests OpenAI is prioritizing higher-value compute workloads over consumer video products."
           }
         ]
       }
