@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { StoryArticle } from "@/components/StoryArticle";
 import type { LoadedStory } from "@/lib/brief-data";
+import { STORY_FRAME_TEMPLATES } from "@/lib/story-templates";
 import type { StoryFrame } from "@/types/story-frame";
 
 async function validateRemote(raw: string): Promise<
@@ -20,6 +21,7 @@ async function validateRemote(raw: string): Promise<
 
 export function TemplatingClient({ initialText }: { initialText: string }) {
   const [text, setText] = useState(initialText);
+  const [templateSelect, setTemplateSelect] = useState("");
   const [debounced, setDebounced] = useState(initialText);
   const [parseError, setParseError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -69,14 +71,19 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
       }
     : null;
 
-  const prefill = useCallback(() => {
-    void fetch("/examples/ex2.json")
-      .then((r) => r.text())
+  const loadTemplate = useCallback((filename: string) => {
+    void fetch(`/templates/${encodeURIComponent(filename)}`)
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error(`HTTP ${r.status}`);
+        }
+        return r.text();
+      })
       .then(setText)
       .catch(() => {
-        setText(initialText);
+        /* keep editor as-is on failure */
       });
-  }, [initialText]);
+  }, []);
 
   const copy = useCallback(async () => {
     try {
@@ -98,14 +105,29 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
               Story Frame JSON · validated against bundled schema
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={prefill}
-              className="rounded-lg bg-surface-container-highest px-3 py-1.5 text-xs font-semibold text-on-surface shadow-sm transition hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/40"
+          <div className="flex flex-wrap items-center gap-2">
+            <label htmlFor="story-template" className="sr-only">
+              Load template
+            </label>
+            <select
+              id="story-template"
+              value={templateSelect}
+              onChange={(e) => {
+                const file = e.target.value;
+                setTemplateSelect(file);
+                if (file) {
+                  loadTemplate(file);
+                }
+              }}
+              className="max-w-[min(100vw-3rem,20rem)] rounded-lg border border-outline-variant/30 bg-surface-container-highest px-3 py-1.5 text-xs font-semibold text-on-surface shadow-sm transition hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/40"
             >
-              Prefill example
-            </button>
+              <option value="">Load template…</option>
+              {STORY_FRAME_TEMPLATES.map((t) => (
+                <option key={t.file} value={t.file}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
             <button
               type="button"
               onClick={copy}

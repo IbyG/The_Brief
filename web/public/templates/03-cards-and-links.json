@@ -1,0 +1,43 @@
+{
+  "rank": 3,
+  "headline": "Cards and links sections",
+  "sections": [
+    {
+      "id": "reading",
+      "type": "cards",
+      "title": "Further reading",
+      "items": [
+        {
+          "category": "Guide",
+          "title": "Authoring Story Frames",
+          "description": "Cards pair a title with body copy; category and CTAs are optional.",
+          "cta_label": "Open docs",
+          "cta_url": "https://example.com/docs/story-frame"
+        },
+        {
+          "category": "Reference",
+          "title": "JSON Schema",
+          "description": "URIs must be valid for cta_url and link items.",
+          "cta_label": "Schema",
+          "cta_url": "https://json-schema.org/"
+        }
+      ]
+    },
+    {
+      "id": "sources",
+      "type": "links",
+      "title": "Sources",
+      "items": [
+        {
+          "label": "Primary announcement",
+          "url": "https://example.com/news/2026-04-05",
+          "source": "Example News"
+        },
+        {
+          "label": "Technical background",
+          "url": "https://example.com/research/background"
+        }
+      ]
+    }
+  ]
+}

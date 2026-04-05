@@ -1,0 +1,167 @@
+{
+  "rank": 10,
+  "headline": "Full spectrum: every option, every section type, dense content",
+  "date_confirmed": "2026-04-05",
+  "sources_confirmed": [
+    "https://example.com/strategy/2026",
+    "https://example.com/datawarehouse/marts-revenue",
+    "https://example.com/legal/dpa-template",
+    "https://example.com/engineering/rfcs/rfc-042"
+  ],
+  "summary": "Maximum-complexity template: all root-level optional fields, meta extensions, every section type with multiple items, optional fields on child objects (notes, categories, CTAs, timeline dates, quote roles, stat context), and generic sections mixing all block kinds with URIs and heterogeneous stat values.",
+  "meta": {
+    "topic": "Cross-functional program",
+    "audience": "C-suite, product, eng, legal",
+    "priority": "P0",
+    "tags": ["strategy", "example", "schema-stress-test", "multi-team"],
+    "doc_owner": "Program office",
+    "review_cycle": "weekly",
+    "classification": "internal"
+  },
+  "sections": [
+    {
+      "id": "north-star",
+      "type": "bullet_list",
+      "title": "North star and guardrails",
+      "description": "Bullets support optional notes for caveats and owners.",
+      "items": [
+        {
+          "text": "Ship unified billing in EU by July without regressing US latency.",
+          "note": "Depends on data residency workstream."
+        },
+        {
+          "text": "Maintain SOC 2 and GDPR DPA commitments during migration.",
+          "note": "Legal sign-off required before cutover."
+        },
+        {
+          "text": "Single dashboard for revenue recognition discrepancies under 0.5%."
+        }
+      ]
+    },
+    {
+      "id": "workstreams",
+      "type": "cards",
+      "title": "Workstreams",
+      "items": [
+        {
+          "category": "Product",
+          "title": "Pricing & packaging",
+          "description": "New tiers, grandfathering rules, and in-app messaging for existing accounts.",
+          "cta_label": "PRD",
+          "cta_url": "https://example.com/pm/pricing-2026"
+        },
+        {
+          "category": "Engineering",
+          "title": "Data plane split",
+          "description": "Region-local writes with global read path; feature flags per tenant.",
+          "cta_label": "RFC 042",
+          "cta_url": "https://example.com/engineering/rfcs/rfc-042"
+        },
+        {
+          "category": "Legal",
+          "title": "Contracts",
+          "description": "DPA updates, subprocessors, and breach notification SLAs.",
+          "cta_label": "DPA template",
+          "cta_url": "https://example.com/legal/dpa-template"
+        },
+        {
+          "title": "Card without category",
+          "description": "category is optional when the card is self-explanatory."
+        }
+      ]
+    },
+    {
+      "id": "decision-log",
+      "type": "timeline",
+      "title": "Decision log",
+      "items": [
+        { "date": "2026-02-01", "text": "Steering committee approved EU-first rollout." },
+        { "date": "2026-03-10", "text": "Architecture review: approve dual-write phase." },
+        { "text": "Pending: finalize comms date with marketing (no fixed date yet)." }
+      ]
+    },
+    {
+      "id": "stakeholder-soundbites",
+      "type": "quotes",
+      "title": "Stakeholder soundbites",
+      "items": [
+        {
+          "quote": "We will not trade customer trust for a faster launch.",
+          "speaker": "CEO",
+          "role": "Executive sponsor"
+        },
+        {
+          "quote": "Observability budget is part of the definition of done.",
+          "speaker": "CTO",
+          "role": "Technical sponsor"
+        },
+        {
+          "quote": "If the brief is unclear, pause and rewrite — ambiguity is debt."
+        }
+      ]
+    },
+    {
+      "id": "scoreboard",
+      "type": "stats",
+      "title": "Scoreboard",
+      "items": [
+        { "label": "ARR at risk (EU)", "value": "$1.2M", "context": "if slip > 60 days" },
+        { "label": "Engineering headcount allocated", "value": "18", "context": "FTE" },
+        { "label": "Migration progress", "value": "34%", "context": "by row count" },
+        { "label": "Open P0 blockers", "value": "1" },
+        { "label": "Estimated weeks to GA", "value": 11.5, "context": "Monte Carlo p50" }
+      ]
+    },
+    {
+      "id": "reading-list",
+      "type": "links",
+      "title": "Reading list",
+      "items": [
+        {
+          "label": "2026 strategy memo",
+          "url": "https://example.com/strategy/2026",
+          "source": "Strategy"
+        },
+        {
+          "label": "Revenue marts documentation",
+          "url": "https://example.com/datawarehouse/marts-revenue",
+          "source": "Data"
+        },
+        {
+          "label": "Public status page",
+          "url": "https://status.example.com/"
+        }
+      ]
+    },
+    {
+      "id": "appendix-mixed-blocks",
+      "type": "generic",
+      "title": "Appendix — structured freeform",
+      "description": "Demonstrates rapid alternation between block kinds in one titled section.",
+      "items": [
+        {
+          "kind": "text",
+          "text": "Use this pattern when a single narrative must combine prose, citations, metrics, and pull quotes without exploding into many top-level sections."
+        },
+        { "kind": "bullet", "text": "Hypothesis: dual-write window stays under four weeks if freeze discipline holds." },
+        { "kind": "bullet", "text": "Risk: vendor API rate limits during backfill." },
+        { "kind": "stat", "label": "Backfill throughput (rows/s)", "value": "18500" },
+        { "kind": "stat", "label": "Throttle headroom", "value": "22%" },
+        {
+          "kind": "link",
+          "label": "Runbook: backfill",
+          "url": "https://example.com/runbooks/backfill"
+        },
+        {
+          "kind": "quote",
+          "quote": "Complexity belongs in systems we can test, not in the brief.",
+          "speaker": "Principal engineer"
+        },
+        {
+          "kind": "text",
+          "text": "End of maximum-complexity example — ids stay lowercase alphanumeric with hyphens; URIs validate; sources_confirmed entries are unique."
+        }
+      ]
+    }
+  ]
+}

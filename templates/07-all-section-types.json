@@ -1,0 +1,60 @@
+{
+  "rank": 7,
+  "headline": "One section of each type",
+  "summary": "Kitchen-sink layout: bullet_list, cards, links, timeline, quotes, stats, and generic in a single story.",
+  "sections": [
+    {
+      "id": "bullets",
+      "type": "bullet_list",
+      "title": "Bullet list",
+      "items": [{ "text": "Structured list with optional per-item notes." }]
+    },
+    {
+      "id": "cards",
+      "type": "cards",
+      "title": "Cards",
+      "items": [
+        {
+          "title": "Card A",
+          "description": "Minimum card is title + description.",
+          "cta_label": "Details",
+          "cta_url": "https://example.com/a"
+        }
+      ]
+    },
+    {
+      "id": "links",
+      "type": "links",
+      "title": "Links",
+      "items": [
+        { "label": "External", "url": "https://example.org/" }
+      ]
+    },
+    {
+      "id": "timeline",
+      "type": "timeline",
+      "title": "Timeline",
+      "items": [{ "date": "2026-01-01", "text": "Start" }]
+    },
+    {
+      "id": "quotes",
+      "type": "quotes",
+      "title": "Quotes",
+      "items": [{ "quote": "One quote is enough to show the section." }]
+    },
+    {
+      "id": "stats",
+      "type": "stats",
+      "title": "Stats",
+      "items": [{ "label": "Example", "value": "1" }]
+    },
+    {
+      "id": "generic",
+      "type": "generic",
+      "title": "Generic",
+      "items": [
+        { "kind": "text", "text": "Closing note as a text block." }
+      ]
+    }
+  ]
+}

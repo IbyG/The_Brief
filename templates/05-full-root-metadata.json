@@ -1,0 +1,27 @@
+{
+  "rank": 5,
+  "headline": "All optional root fields",
+  "date_confirmed": "2026-04-05",
+  "sources_confirmed": [
+    "https://example.com/internal/briefs/2026-04-05",
+    "https://example.com/wiki/runbook-oncall"
+  ],
+  "summary": "Demonstrates date_confirmed (ISO date), unique sources_confirmed URLs, summary text, and meta for topic, audience, priority, and tags.",
+  "meta": {
+    "topic": "Operations",
+    "audience": "Leads and ICs",
+    "priority": "P1",
+    "tags": ["brief", "validated", "example"]
+  },
+  "sections": [
+    {
+      "id": "overview",
+      "type": "bullet_list",
+      "title": "Why this template exists",
+      "items": [
+        { "text": "sources_confirmed must list unique strings (often URLs)." },
+        { "text": "meta can include topic, audience, priority, and tags arrays." }
+      ]
+    }
+  ]
+}

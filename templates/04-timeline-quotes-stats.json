@@ -1,0 +1,42 @@
+{
+  "rank": 4,
+  "headline": "Timeline, quotes, and stats",
+  "sections": [
+    {
+      "id": "chronology",
+      "type": "timeline",
+      "title": "What happened",
+      "items": [
+        { "date": "2026-04-01", "text": "Kickoff and scope lock." },
+        { "date": "2026-04-03", "text": "First integration build green in CI." },
+        { "text": "Timeline items can omit date when the order alone is enough." }
+      ]
+    },
+    {
+      "id": "voices",
+      "type": "quotes",
+      "title": "Stakeholder voices",
+      "items": [
+        {
+          "quote": "We will ship when quality bars are met, not before.",
+          "speaker": "Alex Chen",
+          "role": "Engineering lead"
+        },
+        {
+          "quote": "Clarity in the brief saves weeks downstream.",
+          "speaker": "Jordan Smith"
+        }
+      ]
+    },
+    {
+      "id": "metrics",
+      "type": "stats",
+      "title": "By the numbers",
+      "items": [
+        { "label": "Uptime (30d)", "value": "99.97%", "context": "rolling window" },
+        { "label": "Latency p95 (ms)", "value": 42.7, "context": "API gateway" },
+        { "label": "Open incidents", "value": "0" }
+      ]
+    }
+  ]
+}
