@@ -1,7 +1,7 @@
 {
   "rank": 1,
   "headline": "Daily Brief — April 5, 2026",
-  "summary": "When this file is present for the selected calendar day, the feed shows only this story.",
+  "summary": "Named daily briefs use daily_brief_DD-MM-YYYY.json; the feed still lists every valid JSON file as its own card.",
   "sections": [
     {
       "id": "today",
@@ -9,7 +9,7 @@
       "title": "Today",
       "items": [
         { "text": "This file uses the daily naming convention daily_brief_DD-MM-YYYY.json." },
-        { "text": "Pick today in the header date control to scope the feed to this brief." }
+        { "text": "Other Story Frame JSON files in the same folder appear as separate cards below." }
       ]
     }
   ]

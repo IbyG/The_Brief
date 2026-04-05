@@ -23,12 +23,12 @@ export interface BriefsResult {
   dataDir: string;
   loadedAt: string;
   dailyBriefBasename: string | null;
-  /** True when `dailyBriefBasename` exists on disk (even if invalid — then we fall back to all files). */
+  /** True when `dailyBriefBasename` exists on disk (metadata only; the feed always merges every valid `*.json`). */
   dailyBriefFilePresent: boolean;
-  /** True when the daily file was used as the only source (valid). */
-  dailyBriefActive: boolean;
-  /** When a daily file exists and is valid, stories are limited to that file. */
-  scope: "daily" | "all";
+  /** Kept for API stability; always false (daily files are merged with all other stories). */
+  dailyBriefActive: false;
+  /** Kept for API stability; always `"all"`. */
+  scope: "all";
   stories: LoadedStory[];
   errors: IngestError[];
 }
@@ -147,24 +147,6 @@ export async function loadBriefs(options: LoadBriefsOptions): Promise<BriefsResu
   const jsonFiles = entries.filter(
     (n) => n.toLowerCase().endsWith(".json") && !n.startsWith("."),
   );
-
-  if (dailyBriefBasename && jsonFiles.includes(dailyBriefBasename)) {
-    const dailyErrors: IngestError[] = [];
-    const one = await readOneJsonFile(dataDir, dailyBriefBasename, dailyErrors);
-    if (one) {
-      return {
-        dataDir,
-        loadedAt,
-        dailyBriefBasename,
-        dailyBriefFilePresent: true,
-        dailyBriefActive: true,
-        scope: "daily",
-        stories: [one].sort(sortStories),
-        errors: dailyErrors,
-      };
-    }
-    errors.push(...dailyErrors);
-  }
 
   const stories: LoadedStory[] = [];
   for (const name of jsonFiles.sort((a, b) => a.localeCompare(b))) {

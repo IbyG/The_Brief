@@ -19,7 +19,7 @@ Environment:
 
 - `BRIEF_DATA_DIR` — absolute path to the JSON directory (default `/data` in the image).
 
-Daily brief files use `daily_brief_DD-MM-YYYY.json`. When that file exists for the date selected in the header, the feed shows only that brief; otherwise all `*.json` files in the data directory are merged and sorted by `rank`, then filename, then modification time.
+Daily brief files may use `daily_brief_DD-MM-YYYY.json` (and other `*.json` Story Frame files can live alongside them). The feed always loads every valid `*.json` in the data directory and shows one card per file, sorted by `rank`, then filename, then modification time.
 
 ## Local development (optional)
 

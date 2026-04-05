@@ -10,18 +10,6 @@ import { collectTagsFromStories, storyMatchesTag } from "@/lib/story-tags";
 
 export const dynamic = "force-dynamic";
 
-function buildStoryHref(
-  basename: string,
-  isoDate: string,
-  selectedTag: string | null,
-): string {
-  const qs = new URLSearchParams({ date: isoDate });
-  if (selectedTag) {
-    qs.set("tag", selectedTag);
-  }
-  return `/s/${encodeURIComponent(basename)}?${qs.toString()}`;
-}
-
 export default async function HomePage({
   searchParams,
 }: {
@@ -45,13 +33,6 @@ export default async function HomePage({
       <AppHeader active="stories" />
       <main className="mx-auto w-full max-w-[900px] flex-1 space-y-8 px-6 py-12">
         <IngestNotifications errors={result.errors} />
-
-        {result.scope === "daily" ? (
-          <p className="text-sm text-on-surface-variant">
-            Showing daily brief{" "}
-            <span className="font-mono">{result.dailyBriefBasename}</span>.
-          </p>
-        ) : null}
 
         <TagFilterBar isoDate={isoDate} tags={tagOptions} selectedTag={selectedTag} />
 
@@ -81,11 +62,7 @@ export default async function HomePage({
         ) : (
           <div className="flex flex-col gap-8">
             {displayStories.map((entry) => (
-              <StoryFeedCard
-                key={entry.filename}
-                entry={entry}
-                href={buildStoryHref(entry.basename, isoDate, selectedTag)}
-              />
+              <StoryFeedCard key={entry.filename} entry={entry} />
             ))}
           </div>
         )}
