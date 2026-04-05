@@ -4,10 +4,40 @@ import { json } from "@codemirror/lang-json";
 import { EditorView } from "@codemirror/view";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { SectionBlockPickerModal } from "@/app/templating/SectionBlockPickerModal";
 import { StoryArticle } from "@/components/StoryArticle";
 import type { LoadedStory } from "@/lib/brief-data";
 import { STORY_FRAME_TEMPLATES } from "@/lib/story-templates";
-import type { StoryFrame } from "@/types/story-frame";
+import type { Section, StoryFrame } from "@/types/story-frame";
+
+function makeUniqueSectionId(type: Section["type"]): string {
+  const slug = type.replace(/_/g, "-");
+  return `${slug}-${Date.now().toString(36)}`;
+}
+
+function appendSectionToEditorJson(raw: string, section: Section):
+  | { ok: true; next: string }
+  | { ok: false; message: string } {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return { ok: false, message: "Fix JSON syntax in the editor before adding a section." };
+  }
+  if (!parsed || typeof parsed !== "object") {
+    return { ok: false, message: "Story JSON must be an object with a sections array." };
+  }
+  const obj = parsed as { sections?: unknown };
+  if (!Array.isArray(obj.sections)) {
+    return { ok: false, message: "Story JSON must include a sections array." };
+  }
+  const nextSection = { ...section, id: makeUniqueSectionId(section.type) };
+  const next = {
+    ...obj,
+    sections: [...obj.sections, nextSection],
+  };
+  return { ok: true, next: JSON.stringify(next, null, 2) };
+}
 
 async function validateRemote(raw: string): Promise<
   | { ok: true; data: StoryFrame }
@@ -39,6 +69,8 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
   const [parseError, setParseError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [story, setStory] = useState<StoryFrame | null>(null);
+  const [blockPickerOpen, setBlockPickerOpen] = useState(false);
+  const [sectionInsertError, setSectionInsertError] = useState<string | null>(null);
 
   useEffect(() => {
     const t = window.setTimeout(() => setDebounced(text), 450);
@@ -106,6 +138,20 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
     }
   }, [text]);
 
+  const handleAddSectionFromPicker = useCallback(
+    (section: Section) => {
+      const result = appendSectionToEditorJson(text, section);
+      if (!result.ok) {
+        setSectionInsertError(result.message);
+        return;
+      }
+      setSectionInsertError(null);
+      setText(result.next);
+      setBlockPickerOpen(false);
+    },
+    [text],
+  );
+
   const cmExtensions = useMemo(
     () => [
       json(),
@@ -127,7 +173,7 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
   );
 
   return (
-    <main className="flex min-h-0 flex-1 flex-col overflow-hidden md:flex-row md:items-stretch">
+    <main className="flex h-full min-h-0 flex-1 flex-col overflow-hidden md:flex-row md:items-stretch">
       <section className="flex min-h-0 flex-1 flex-col overflow-hidden border-outline-variant/20 p-6 md:border-r">
         <div className="mb-4 flex shrink-0 flex-wrap items-center justify-between gap-3">
           <div>
@@ -163,10 +209,13 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
             </select>
             <button
               type="button"
-              onClick={copy}
+              onClick={() => {
+                setSectionInsertError(null);
+                setBlockPickerOpen(true);
+              }}
               className="rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-on-primary shadow-md transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-primary/40"
             >
-              Copy to clipboard
+              Select Block
             </button>
           </div>
         </div>
@@ -207,36 +256,56 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
             />
           </button>
         </div>
-        <div className="mt-3 shrink-0 space-y-2">
-          {parseError ? (
-            <p className="text-sm text-error" role="alert">
-              JSON parse: {parseError}
-            </p>
-          ) : null}
-          {!parseError && validationErrors.length > 0 ? (
-            <ul className="list-inside list-disc text-sm text-on-surface-variant" role="status">
-              {validationErrors.map((e, i) => (
-                <li key={i}>{e}</li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
+        <SectionBlockPickerModal
+          open={blockPickerOpen}
+          onClose={() => {
+            setBlockPickerOpen(false);
+            setSectionInsertError(null);
+          }}
+          onAddToTemplate={handleAddSectionFromPicker}
+          insertError={sectionInsertError}
+          onDismissError={() => setSectionInsertError(null)}
+        />
       </section>
-      <section className="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface-container-low/50 p-6">
-        <div className="mb-4 shrink-0">
+      <section className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-4 overflow-hidden bg-surface-container-low/50 p-6">
+        <div className="min-w-0 shrink-0">
           <h2 className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">
             Live preview
           </h2>
           <p className="mt-1 text-xs text-on-surface-variant">Debounced validation + render</p>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          {preview ? (
-            <StoryArticle entry={preview} />
-          ) : (
-            <div className="rounded-2xl bg-surface-container-lowest p-8 text-on-surface-variant shadow-lg">
-              <p>Valid JSON will appear here.</p>
+        <div className="min-h-0 min-w-0 overflow-y-auto overscroll-contain">
+          <div className="flex flex-col gap-4 pb-1">
+            <div className="min-w-0 shrink-0">
+              {preview ? (
+                <StoryArticle entry={preview} />
+              ) : (
+                <div className="rounded-2xl bg-surface-container-lowest p-8 text-on-surface-variant shadow-lg">
+                  <p>Valid JSON will appear here.</p>
+                </div>
+              )}
             </div>
-          )}
+            {(parseError !== null || validationErrors.length > 0) && (
+              <div
+                className="shrink-0 rounded-xl border border-error/35 bg-surface-container-lowest p-4 shadow-sm"
+                role="region"
+                aria-label="Validation issues"
+              >
+                {parseError ? (
+                  <p className="text-sm text-error" role="alert">
+                    JSON parse: {parseError}
+                  </p>
+                ) : null}
+                {!parseError && validationErrors.length > 0 ? (
+                  <ul className="list-inside list-disc space-y-1.5 text-sm text-on-surface-variant" role="status">
+                    {validationErrors.map((e, i) => (
+                      <li key={i}>{e}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </main>

@@ -1,0 +1,15 @@
+{
+  "id": "sample-generic",
+  "type": "generic",
+  "title": "Mixed content",
+  "description": "Generic sections combine text, bullets, links, stats, and quotes as content blocks.",
+  "items": [
+    { "kind": "text", "text": "Lead with a short paragraph. Each block has a kind that matches the schema." },
+    { "kind": "bullet", "text": "Use bullet blocks for single-line emphasis inside generic sections." },
+    {
+      "kind": "stat",
+      "label": "Engagement",
+      "value": "+12%"
+    }
+  ]
+}

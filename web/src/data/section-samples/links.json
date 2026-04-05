@@ -1,0 +1,16 @@
+{
+  "id": "sample-links",
+  "type": "links",
+  "title": "Sources & further reading",
+  "items": [
+    {
+      "label": "Official announcement",
+      "url": "https://example.org/news",
+      "source": "Example Org"
+    },
+    {
+      "label": "Industry analysis",
+      "url": "https://example.com/analysis"
+    }
+  ]
+}

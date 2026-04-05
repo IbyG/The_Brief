@@ -246,11 +246,7 @@
         "properties": {
           "label": { "type": "string", "minLength": 1 },
           "value": {
-            "oneOf": [
-              { "type": "string" },
-              { "type": "number" },
-              { "type": "integer" }
-            ]
+            "type": ["string", "number"]
           },
           "context": { "type": "string" }
         }
@@ -300,11 +296,7 @@
           "kind": { "const": "stat" },
           "label": { "type": "string", "minLength": 1 },
           "value": {
-            "oneOf": [
-              { "type": "string" },
-              { "type": "number" },
-              { "type": "integer" }
-            ]
+            "type": ["string", "number"]
           }
         }
       },

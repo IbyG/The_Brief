@@ -1,0 +1,12 @@
+{
+  "id": "sample-quotes",
+  "type": "quotes",
+  "title": "What they said",
+  "items": [
+    {
+      "quote": "We are doubling down on clarity for readers first, platforms second.",
+      "speaker": "Editor in Chief",
+      "role": "Newsroom"
+    }
+  ]
+}

@@ -10,7 +10,7 @@ export default async function TemplatingPage() {
   const initialText = await fs.readFile(samplePath, "utf8");
 
   return (
-    <div className="flex h-dvh max-h-dvh flex-col overflow-hidden">
+    <div className="flex h-dvh max-h-dvh min-h-0 flex-col overflow-hidden">
       <AppHeader active="templating" />
       <TemplatingClient initialText={initialText} />
     </div>

@@ -1,0 +1,10 @@
+{
+  "id": "sample-timeline",
+  "type": "timeline",
+  "title": "How we got here",
+  "items": [
+    { "date": "2026-01-10", "text": "Rumors surfaced about a strategic pivot." },
+    { "date": "2026-02-02", "text": "Leadership confirmed an internal review." },
+    { "text": "Today: public confirmation and next steps." }
+  ]
+}

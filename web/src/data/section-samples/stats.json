@@ -1,0 +1,9 @@
+{
+  "id": "sample-stats",
+  "type": "stats",
+  "title": "By the numbers",
+  "items": [
+    { "label": "Stories filed", "value": 42, "context": "This week" },
+    { "label": "Avg. read time", "value": "3m" }
+  ]
+}

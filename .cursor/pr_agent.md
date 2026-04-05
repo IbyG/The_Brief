@@ -110,36 +110,32 @@ Use and reference the following structured input (the user will fill these in):
 
   
 
-- **Product Name:** Home_budget
+- **Product Name:** The Brief
 
   
 
-- **Color Scheme**:  white and blue
+- **Color Scheme**:  Refer to Documentation_References/UI DESIGN.md
   
   
 
-- **Summary of the Application**: The goal of the application is to track house hold expenses. knowing which accounts are associated with which households, the monthly transactions the current transactions and future transactions. Having buckets to allocate money before the expenditure happens and seeing the expenditure trend overtime for the household. 
-  
+- **Summary of the Application**:  A centralized web dashboard that aggregates structured data from multiple independent/siloed applications and presents them in a single, consistently formatted view for daily user consumption.
+
+- **User Value Proposition**: Instead of opening 5 different tools/scripts to check their outputs, I open one dashboard and see everything formatted consistently, prioritized, and ready to act on.
+
 
 - **In detail requirements**:
 
-1. login/signup page for the user
-2. user can create a household
-3. user can create accounts
-4. user can see the transaction transactions associated to the account when selecting the account
-5. user can perform crud operations for the transaction data in that are associated to the account
-6. user can see the buckets (card view OR table view)
-7. user can edit the buckets 'In/Out' field to add/remove money from the bucket.
-8. user can add/remove transactions to the bucket when clicking on the bucket
-9. user can create a bucket where they need to enter the bucket name, bucket type, amount and target date. 
-10. user can create bucket groups and assign the buckets to the groups.
-11. user can reorder the groups
-12. user can reorder the buckets 
-13. user can see all the transactions for the current month. table view or timeline view.
-14. user can perform crud operations in the transactions page
-15. user can see scheduled transaction forecasts of when certain payments will be made.
-16. user can perfrom crud operations for the scheduled transactions
-17. user can see an analytics dashboard summarising the monthly expenditures. number widgets, line graphs, balance trend, heatmap of bucket expenditure, 
+1. Application must monitor and read JSON files from a designated /data directory
+2. Support for mulitple JSON files 
+3. Files must follow a predefined JSON schema for validation (Schema: Documentation_References/JSON References/JSON_Schema.json )
+4. Automatic detection of new or updated files
+5. support for daily timestampes files (e.g. daily_brief_05-12-2026)
+6. Graceful handling of malformed or invalid JSON files (log error, skip file, continue processing)
+7. No database required - file system is the source of truth
+8. Follow the UI wireframes located at Documentation_References/wireframes
+8. Follow UI Design located at Documentation_References/UI DESIGN.md
+9. here are some json examples to for the templating page: Documentation_References/JSON References/json Examples
+
 
 
 - **Integration Needs:** supabase
@@ -149,15 +145,15 @@ Use and reference the following structured input (the user will fill these in):
 
 - Frontend: Next.js (App Router), Tailwind CSS.
 
-- Backend: sqlite database
+- Backend: no backend, read from /data directory the json fiels
 
-- Database: sqlite is the immediate database, but then the sqlite lite database will need to be backed up the a postgres supabase account as a backup.
+- Database: N/A
 
-- Charting: Chart.js
+- Charting: N/A
 
-- Auth: nextauth.js
+- Auth: N/A
 
-- Admin Interface: NA
+- Admin Interface: N/A
 
 - API: NA
 

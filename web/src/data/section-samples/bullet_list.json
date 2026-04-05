@@ -1,0 +1,11 @@
+{
+  "id": "sample-bullet-list",
+  "type": "bullet_list",
+  "title": "Key Takeaways",
+  "description": "Optional section description shown in some layouts.",
+  "items": [
+    { "text": "Prioritize editorial clarity so readers grasp the core story fast." },
+    { "text": "Use tonal background shifts to separate beats without heavy chrome." },
+    { "text": "Incorporate primary coral (#ac2b31) for emphasis and hierarchy." }
+  ]
+}

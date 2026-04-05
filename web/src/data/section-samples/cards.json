@@ -1,0 +1,14 @@
+{
+  "id": "sample-cards",
+  "type": "cards",
+  "title": "At a glance",
+  "items": [
+    {
+      "category": "Context",
+      "title": "Market signal",
+      "description": "Cards pair a title with supporting copy; optional category and CTA link out.",
+      "cta_label": "Read more",
+      "cta_url": "https://example.com/article"
+    }
+  ]
+}
