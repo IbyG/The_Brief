@@ -175,7 +175,7 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
         </span>
         <div
           aria-labelledby="brief-json-label"
-          className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-outline-variant/20 bg-black shadow-inner focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30"
+          className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-outline-variant/20 bg-black shadow-inner focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30"
         >
           <CodeMirror
             value={text}
@@ -190,6 +190,22 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
               highlightActiveLine: true,
             }}
           />
+          <button
+            type="button"
+            onClick={copy}
+            className="group absolute bottom-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 bg-stone-900/90 text-stone-200 shadow-md backdrop-blur-sm transition hover:border-white/25 hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            aria-label="Copy JSON to clipboard"
+            title="Copy to clipboard"
+          >
+            <img
+              src="/icons/clipboard.svg"
+              alt=""
+              width={18}
+              height={18}
+              className="pointer-events-none h-[18px] w-[18px] opacity-90 brightness-0 invert transition group-hover:opacity-100"
+              aria-hidden
+            />
+          </button>
         </div>
         <div className="mt-3 shrink-0 space-y-2">
           {parseError ? (
