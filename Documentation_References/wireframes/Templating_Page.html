@@ -1,0 +1,281 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Templating - The Editorial Stream</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#8c706f",
+                    "on-surface": "#1a1c1c",
+                    "on-error-container": "#93000a",
+                    "error": "#ba1a1a",
+                    "tertiary": "#00694e",
+                    "on-tertiary-container": "#f5fff8",
+                    "tertiary-container": "#008563",
+                    "primary-container": "#cd4447",
+                    "background": "#f9f9f9",
+                    "surface-container": "#eeeeee",
+                    "secondary-fixed": "#84f5ee",
+                    "primary": "#ac2b31",
+                    "secondary": "#006a66",
+                    "on-background": "#1a1c1c",
+                    "secondary-fixed-dim": "#66d8d2",
+                    "surface-container-high": "#e8e8e8",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-secondary-fixed": "#00201e",
+                    "inverse-surface": "#2f3131",
+                    "outline-variant": "#e0bfbd",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#5edcb0",
+                    "surface-variant": "#e2e2e2",
+                    "on-primary-fixed": "#410006",
+                    "inverse-primary": "#ffb3b0",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f0f1f1",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#00513c",
+                    "primary-fixed-dim": "#ffb3b0",
+                    "surface-tint": "#af2d33",
+                    "on-tertiary-fixed": "#002116",
+                    "surface-container-low": "#f3f3f3",
+                    "on-primary-container": "#fffbff",
+                    "tertiary-fixed": "#7df9cb",
+                    "on-secondary-container": "#006f6a",
+                    "on-secondary-fixed-variant": "#00504d",
+                    "surface-bright": "#f9f9f9",
+                    "secondary-container": "#81f2eb",
+                    "primary-fixed": "#ffdad8",
+                    "on-primary-fixed-variant": "#8d121f",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#594140",
+                    "surface-dim": "#dadada",
+                    "surface": "#f9f9f9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .dot-grid {
+            background-image: radial-gradient(#e0bfbd 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .json-syntax-key { color: #f05d5e; }
+        .json-syntax-string { color: #84f5ee; }
+        .json-syntax-number { color: #7df9cb; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased dot-grid min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-stone-50/80 backdrop-blur-md shadow-sm">
+<div class="flex items-center justify-between px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-stone-900" style="">The Editorial Stream</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-stone-500 hover:text-stone-900 transition-colors font-medium text-sm" href="#" style="">Stories</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors font-medium text-sm" href="#" style="">Trending</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors font-medium text-sm" href="#" style="">Insights</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors font-medium text-sm" href="#" style="">Archive</a>
+<a class="text-[#ac2b31] border-b-2 border-[#ac2b31] font-bold text-sm" href="#" style="">Templating</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm" style="">search</span>
+<input class="pl-10 pr-4 py-2 bg-stone-100 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search templates..." type="text">
+</div>
+<span class="material-symbols-outlined text-stone-600 cursor-pointer hover:text-primary transition-colors" style="">notifications</span>
+<span class="material-symbols-outlined text-stone-600 cursor-pointer hover:text-primary transition-colors" style="">account_circle</span>
+</div>
+</div>
+<div class="bg-stone-200/50 h-[1px] w-full"></div>
+</header>
+<main class="pt-20 pb-20 md:pb-0 h-screen flex flex-col md:flex-row overflow-hidden">
+<!-- Left Side: JSON Editor (Dark Mode Glassmorphism) -->
+<section class="flex-1 h-full p-6 flex flex-col overflow-hidden border-r border-stone-200/50">
+<div class="mb-4 flex items-center justify-between">
+<div>
+<h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-sm" style="">code</span> Editor
+                    </h2>
+<p class="text-xs text-stone-500 mt-1" style="">schema_v2.json • Briefing Template</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white shadow-sm border border-stone-200 hover:bg-stone-50 transition-all flex items-center gap-1" style="">Prefill with Example</button>
+<button class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary text-white shadow-md hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-sm" style="">rocket_launch</span>Copy to clipboard</button>
+</div>
+</div>
+<div class="flex-1 rounded-xl overflow-hidden bg-stone-900 shadow-2xl relative flex ring-1 ring-white/10 backdrop-blur-xl">
+<!-- Line Numbers -->
+<div class="w-12 bg-stone-950/50 text-stone-600 text-[11px] font-mono py-4 text-right pr-3 select-none flex flex-col gap-1 border-r border-white/5">
+<div class="" style="">1</div><div class="" style="">2</div><div class="" style="">3</div><div class="" style="">4</div><div class="" style="">5</div><div class="" style="">6</div><div class="" style="">7</div><div class="" style="">8</div><div class="" style="">9</div><div class="" style="">10</div><div class="" style="">11</div><div class="" style="">12</div><div class="" style="">13</div><div class="" style="">14</div><div class="" style="">15</div><div class="" style="">16</div><div class="" style="">17</div><div class="" style="">18</div><div class="" style="">19</div><div class="" style="">20</div><div class="" style="">21</div><div class="" style="">22</div><div class="" style="">23</div><div class="" style="">24</div><div class="" style="">25</div><div class="" style="">26</div><div class="" style="">27</div><div class="" style="">28</div><div class="" style="">29</div>
+</div>
+<!-- Content Area -->
+<div class="flex-1 p-4 font-mono text-[13px] leading-relaxed overflow-y-auto text-stone-300">
+<div class="" style="">{</div>
+<div class="pl-4" style=""><span class="json-syntax-key" style="">"rank"</span>: <span class="json-syntax-number" style="">1</span>,</div>
+<div class="pl-4" style=""><span class="json-syntax-key" style="">"headline"</span>: <span class="json-syntax-string" style="">"OpenAI Shuts Down Sora"</span>,</div>
+<div class="pl-4" style=""><span class="json-syntax-key" style="">"date_confirmed"</span>: <span class="json-syntax-string" style="">"2026-03-24"</span>,</div>
+<div class="pl-4" style=""><span class="json-syntax-key" style="">"sources_confirmed"</span>: [</div>
+<div class="pl-8" style=""><span class="json-syntax-string" style="">"CNN"</span>,</div>
+<div class="pl-8" style=""><span class="json-syntax-string" style="">"TechCrunch"</span>,</div>
+<div class="pl-8"><span class="json-syntax-string" style="">"Bloomberg"</span></div>
+<div class="pl-4" style="">],</div>
+<div class="pl-4" style=""><span class="json-syntax-key" style="">"sections"</span>: [</div>
+<div class="pl-8" style="">{</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"id"</span>: <span class="json-syntax-string" style="">"what-happened"</span>,</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"type"</span>: <span class="json-syntax-string" style="">"bullet_list"</span>,</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"title"</span>: <span class="json-syntax-string" style="">"What Happened"</span>,</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"items"</span>: [</div>
+<div class="pl-16" style="">{ <span class="json-syntax-key" style="">"text"</span>: <span class="json-syntax-string" style="">"OpenAI shut down the Sora standalone app and API."</span> },</div>
+<div class="pl-16" style="">{ <span class="json-syntax-key" style="">"text"</span>: <span class="json-syntax-string" style="">"The shutdown canceled a major Disney licensing deal."</span> }</div>
+<div class="pl-12" style="">]</div>
+<div class="pl-8" style="">},</div>
+<div class="pl-8" style="">{</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"id"</span>: <span class="json-syntax-string" style="">"why-it-matters"</span>,</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"type"</span>: <span class="json-syntax-string" style="">"bullet_list"</span>,</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"title"</span>: <span class="json-syntax-string" style="">"Why It Matters"</span>,</div>
+<div class="pl-12" style=""><span class="json-syntax-key" style="">"items"</span>: [</div>
+<div class="pl-16" style="">{ <span class="json-syntax-key" style="">"text"</span>: <span class="json-syntax-string" style="">"It suggests AI video generation may not yet have strong consumer demand."</span> }</div>
+<div class="pl-12" style="">]</div>
+<div class="pl-8" style="">}</div>
+<div class="pl-4" style="">]</div>
+<div class="" style="">}</div>
+</div>
+</div>
+</section>
+<!-- Right Side: Live Preview -->
+<section class="flex-1 h-full bg-stone-50/50 p-6 flex flex-col overflow-y-auto">
+<div class="mb-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-sm" style="">visibility</span> Live Preview
+                </h2>
+<p class="text-xs text-stone-500 mt-1" style="">Real-time render of the current draft</p>
+</div>
+<!-- Preview Canvas -->
+<div class="flex-1 w-full max-w-[900px] mx-auto bg-white rounded-2xl shadow-xl shadow-stone-200/50 border border-stone-100 p-8 md:p-12 mb-8">
+<!-- Briefing Header -->
+<div class="relative flex flex-col gap-6 mb-12">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center text-lg font-black italic shadow-lg shadow-primary/20" style="">
+                            #1
+                        </div>
+<span class="text-xs font-bold uppercase tracking-widest text-primary bg-primary/5 px-3 py-1 rounded-full" style="">Top Headline • March 24, 2026</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-black text-on-surface leading-[1.1] tracking-tight" style="">
+                        OpenAI Shuts <br class="hidden md:block"> Down Sora
+                    </h1>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 text-sm">
+<div class="flex items-center gap-1.5 text-stone-400 font-medium" style="">
+<span class="material-symbols-outlined text-[18px]" style="">verified_user</span>
+                            Confirmed by:
+                        </div>
+<div class="flex gap-3">
+<span class="px-2 py-0.5 bg-stone-100 rounded text-stone-600 font-semibold text-xs border border-stone-200" style="">CNN</span>
+<span class="px-2 py-0.5 bg-stone-100 rounded text-stone-600 font-semibold text-xs border border-stone-200" style="">TechCrunch</span>
+<span class="px-2 py-0.5 bg-stone-100 rounded text-stone-600 font-semibold text-xs border border-stone-200" style="">Bloomberg</span>
+</div>
+</div>
+</div>
+<!-- Sections -->
+<div class="space-y-10">
+<!-- Section: What Happened -->
+<div class="relative pl-8 border-l-2 border-stone-100">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary ring-4 ring-white"></div>
+<h3 class="text-lg font-bold text-on-surface-variant mb-4 flex items-center gap-2" style="">
+                            What Happened
+                        </h3>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 group" style="">
+<span class="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 group-hover:scale-150 transition-transform"></span>
+<p class="text-stone-700 leading-relaxed font-medium" style="">OpenAI shut down the Sora standalone app and API.</p>
+</li>
+<li class="flex items-start gap-3 group" style="">
+<span class="mt-2 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 group-hover:scale-150 transition-transform"></span>
+<p class="text-stone-700 leading-relaxed font-medium" style="">The shutdown canceled a major Disney licensing deal.</p>
+</li>
+</ul>
+</div>
+<!-- Section: Why It Matters -->
+<div class="relative pl-8 border-l-2 border-stone-100">
+<div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-secondary ring-4 ring-white"></div>
+<h3 class="text-lg font-bold text-on-surface-variant mb-4" style="">
+                            Why It Matters
+                        </h3>
+<div class="bg-secondary/5 p-5 rounded-xl border border-secondary/10">
+<ul class="space-y-3">
+<li class="flex items-start gap-3 group" style="">
+<span class="mt-2 w-1.5 h-1.5 rounded-full bg-secondary flex-shrink-0 group-hover:scale-150 transition-transform"></span>
+<p class="text-on-secondary-container leading-relaxed font-medium" style="">It suggests AI video generation may not yet have strong consumer demand.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="mt-16 pt-8 border-t border-stone-100 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="Editor" class="w-8 h-8 rounded-full border border-stone-200" data-alt="professional headshot of an editorial manager with soft natural lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe4GssBkp-9_gtwgsIJRkNs4Cw-W2qG42JzjiHSNI9TGiH9p-eUWdIrlIOJtC8AndHa87GcGO2V1elcIhjMLv3iWl-i0sXpW07JUnPsVgdo1jh0jlkf-iblWNawIg-Rzd_n--sme3VsuHdwqFCNcZJZqFV7J0NarhOCQ1VjgxuGXNvviZ5sp-8O0NsZyC1oF7A0J-aGSb_71ehi-oVDe6jREvuLmirvXxrPmezUQh0RaAicfPWE1VvaP_Bttm8fBpPjPjnfv2l5zM" style="">
+<div>
+<p class="text-[11px] font-bold text-stone-400 uppercase tracking-widest leading-none" style="">Curated By</p>
+<p class="text-xs font-bold text-stone-900" style="">Marcus Thorne</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-stone-300 hover:text-primary cursor-pointer transition-colors" style="">share</span>
+<span class="material-symbols-outlined text-stone-300 hover:text-primary cursor-pointer transition-colors" style="">bookmark</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl flex justify-around items-center px-4 py-3 pb-safe shadow-[0_-4px_24px_rgba(0,0,0,0.04)] z-50">
+<a class="flex flex-col items-center justify-center text-stone-400" href="#" style="">
+<span class="material-symbols-outlined" style="">auto_stories</span>
+<span class="text-[10px] font-semibold uppercase tracking-tighter" style="">Stories</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400" href="#" style="">
+<span class="material-symbols-outlined" style="">trending_up</span>
+<span class="text-[10px] font-semibold uppercase tracking-tighter" style="">Trending</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400" href="#" style="">
+<span class="material-symbols-outlined" style="">insights</span>
+<span class="text-[10px] font-semibold uppercase tracking-tighter" style="">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400" href="#" style="">
+<span class="material-symbols-outlined" style="">inventory_2</span>
+<span class="text-[10px] font-semibold uppercase tracking-tighter" style="">Archive</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#ac2b31] relative after:content-[''] after:absolute after:-top-2 after:w-1 after:h-1 after:bg-[#ac2b31] after:rounded-full" href="#" style="">
+<span class="material-symbols-outlined" style="">dashboard_customize</span>
+<span class="text-[10px] font-semibold uppercase tracking-tighter" style="">Templating</span>
+</a>
+</nav>
+<!-- SideNavBar (Optional logic fallback for larger screens if required) -->
+<!-- Not rendered in split screen view per layout requirements but components exist in JSON -->
+</body></html>

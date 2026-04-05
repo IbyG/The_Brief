@@ -1,0 +1,94 @@
+{
+    "rank": 1,
+    "headline": "OpenAI Shuts Down Sora — Eliminates $1B Disney Deal",
+    "date_confirmed": "2026-03-24",
+    "sources_confirmed": ["CNN", "TechCrunch", "Bloomberg", "NBC", "NPR"],
+    "meta": {
+      "topic": "AI video",
+      "audience": "tech and creator economy",
+      "priority": "high",
+      "tags": ["openai", "sora", "video-ai", "deepfake", "robots"]
+    },
+    "sections": [
+      {
+        "id": "what-happened",
+        "type": "bullet_list",
+        "title": "What Happened",
+        "items": [
+          { "text": "OpenAI is shutting down the Sora standalone app and API." },
+          { "text": "The Disney licensing deal was eliminated." },
+          { "text": "Compute is being redirected toward coding, reasoning, and text-generation tasks." }
+        ]
+      },
+      {
+        "id": "why-it-matters",
+        "type": "bullet_list",
+        "title": "Why It Matters",
+        "items": [
+          { "text": "AI video may not have found product-market fit for consumers." },
+          { "text": "Other AI video tools may see increased attention." },
+          { "text": "The story supports a broader narrative that commercial AI video remains hard to sustain." }
+        ]
+      },
+      {
+        "id": "proof-traction",
+        "type": "links",
+        "title": "Proof / Traction",
+        "items": [
+          {
+            "label": "Hollywood Reporter",
+            "url": "https://example.com/article-1",
+            "source": "coverage"
+          },
+          {
+            "label": "Al Jazeera",
+            "url": "https://example.com/article-2",
+            "source": "coverage"
+          }
+        ]
+      },
+      {
+        "id": "video-angles",
+        "type": "cards",
+        "title": "Video Angles",
+        "items": [
+          {
+            "category": "News",
+            "title": "OpenAI Just Killed Sora",
+            "description": "React to the shutdown, cover the Disney deal, and explain what it means for AI-generated video."
+          },
+          {
+            "category": "Evergreen",
+            "title": "The Best AI Video Tools Now That Sora's Gone",
+            "description": "Compare Veo, Runway, Kling, and HeyGen."
+          }
+        ]
+      },
+      {
+        "id": "timeline",
+        "type": "timeline",
+        "title": "Timeline",
+        "items": [
+          { "date": "2025-09", "text": "Sora launches." },
+          { "date": "2026-03", "text": "Standalone app and API are shut down." }
+        ]
+      },
+      {
+        "id": "analysis",
+        "type": "rich_text",
+        "title": "Analysis",
+        "items": [
+          {
+            "_type": "block",
+            "style": "normal",
+            "children": [
+              { "_type": "span", "text": "This shift suggests OpenAI is prioritizing ", "marks": [] },
+              { "_type": "span", "text": "higher-value compute workloads", "marks": ["strong"] },
+              { "_type": "span", "text": " over consumer video products.", "marks": [] }
+            ],
+            "markDefs": []
+          }
+        ]
+      }
+    ]
+  }
