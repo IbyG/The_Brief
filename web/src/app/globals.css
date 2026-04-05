@@ -56,3 +56,22 @@ body {
   background-color: #ffdad8;
   color: #410006;
 }
+
+/* Templating page: CodeMirror must fill the flex pane so scrollbars sit at the container edge */
+.templating-json-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.templating-json-editor .cm-editor {
+  flex: 1 1 0%;
+  min-height: 0;
+}
+
+.templating-json-editor .cm-scroller {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  height: auto !important;
+}

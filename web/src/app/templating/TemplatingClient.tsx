@@ -1,6 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { json } from "@codemirror/lang-json";
+import { EditorView } from "@codemirror/view";
+import dynamic from "next/dynamic";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { StoryArticle } from "@/components/StoryArticle";
 import type { LoadedStory } from "@/lib/brief-data";
 import { STORY_FRAME_TEMPLATES } from "@/lib/story-templates";
@@ -18,6 +21,16 @@ async function validateRemote(raw: string): Promise<
   });
   return res.json();
 }
+
+const CodeMirror = dynamic(
+  () => import("@uiw/react-codemirror").then((m) => m.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full min-h-0 flex-1 rounded-xl bg-black shadow-inner" aria-hidden />
+    ),
+  },
+);
 
 export function TemplatingClient({ initialText }: { initialText: string }) {
   const [text, setText] = useState(initialText);
@@ -93,10 +106,30 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
     }
   }, [text]);
 
+  const cmExtensions = useMemo(
+    () => [
+      json(),
+      EditorView.theme(
+        {
+          "&": { backgroundColor: "#000000" },
+          ".cm-editor": { backgroundColor: "#000000" },
+          ".cm-scroller": { backgroundColor: "#000000" },
+          ".cm-content": { backgroundColor: "#000000" },
+          ".cm-gutters": {
+            backgroundColor: "#0a0a0a",
+            borderRight: "1px solid #1f2937",
+          },
+        },
+        { dark: true },
+      ),
+    ],
+    [],
+  );
+
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] flex-col overflow-hidden md:flex-row">
-      <section className="flex flex-1 flex-col overflow-hidden border-outline-variant/20 p-6 md:border-r">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <main className="flex min-h-0 flex-1 flex-col overflow-hidden md:flex-row md:items-stretch">
+      <section className="flex min-h-0 flex-1 flex-col overflow-hidden border-outline-variant/20 p-6 md:border-r">
+        <div className="mb-4 flex shrink-0 flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-on-surface-variant">
               Editor
@@ -137,43 +170,58 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
             </button>
           </div>
         </div>
-        <label className="sr-only" htmlFor="brief-json">
+        <span className="sr-only" id="brief-json-label">
           Brief JSON
-        </label>
-        <textarea
-          id="brief-json"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          spellCheck={false}
-          className="min-h-[320px] flex-1 resize-y rounded-xl border border-outline-variant/20 bg-stone-950 p-4 font-mono text-[13px] leading-relaxed text-stone-200 shadow-inner focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 md:min-h-0"
-        />
-        {parseError ? (
-          <p className="mt-3 text-sm text-error" role="alert">
-            JSON parse: {parseError}
-          </p>
-        ) : null}
-        {!parseError && validationErrors.length > 0 ? (
-          <ul className="mt-3 list-inside list-disc text-sm text-on-surface-variant" role="status">
-            {validationErrors.map((e, i) => (
-              <li key={i}>{e}</li>
-            ))}
-          </ul>
-        ) : null}
+        </span>
+        <div
+          aria-labelledby="brief-json-label"
+          className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-outline-variant/20 bg-black shadow-inner focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30"
+        >
+          <CodeMirror
+            value={text}
+            height="100%"
+            theme="dark"
+            extensions={cmExtensions}
+            onChange={setText}
+            className="templating-json-editor min-h-0 flex-1 text-[13px] leading-relaxed [&_.cm-editor]:outline-none [&_.cm-scroller]:font-mono"
+            basicSetup={{
+              lineNumbers: true,
+              foldGutter: true,
+              highlightActiveLine: true,
+            }}
+          />
+        </div>
+        <div className="mt-3 shrink-0 space-y-2">
+          {parseError ? (
+            <p className="text-sm text-error" role="alert">
+              JSON parse: {parseError}
+            </p>
+          ) : null}
+          {!parseError && validationErrors.length > 0 ? (
+            <ul className="list-inside list-disc text-sm text-on-surface-variant" role="status">
+              {validationErrors.map((e, i) => (
+                <li key={i}>{e}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </section>
-      <section className="flex flex-1 flex-col overflow-y-auto bg-surface-container-low/50 p-6">
-        <div className="mb-4">
+      <section className="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface-container-low/50 p-6">
+        <div className="mb-4 shrink-0">
           <h2 className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">
             Live preview
           </h2>
           <p className="mt-1 text-xs text-on-surface-variant">Debounced validation + render</p>
         </div>
-        {preview ? (
-          <StoryArticle entry={preview} />
-        ) : (
-          <div className="rounded-2xl bg-surface-container-lowest p-8 text-on-surface-variant shadow-lg">
-            <p>Valid JSON will appear here.</p>
-          </div>
-        )}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {preview ? (
+            <StoryArticle entry={preview} />
+          ) : (
+            <div className="rounded-2xl bg-surface-container-lowest p-8 text-on-surface-variant shadow-lg">
+              <p>Valid JSON will appear here.</p>
+            </div>
+          )}
+        </div>
       </section>
     </main>
   );
