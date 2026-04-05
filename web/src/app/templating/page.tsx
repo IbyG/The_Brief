@@ -6,7 +6,7 @@ import { TemplatingClient } from "@/app/templating/TemplatingClient";
 export const dynamic = "force-dynamic";
 
 export default async function TemplatingPage() {
-  const samplePath = path.join(process.cwd(), "src/content/sample-brief.json");
+  const samplePath = path.join(process.cwd(), "public/templates/sample-brief.json");
   const initialText = await fs.readFile(samplePath, "utf8");
 
   return (

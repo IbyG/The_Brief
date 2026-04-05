@@ -1,6 +1,6 @@
 {
-  "rank": 10,
-  "headline": "Full spectrum: every option, every section type, dense content",
+  "rank": 1,
+  "headline": "Schema showcase — every root field, section type, and item option",
   "date_confirmed": "2026-04-05",
   "sources_confirmed": [
     "https://example.com/strategy/2026",
@@ -8,7 +8,7 @@
     "https://example.com/legal/dpa-template",
     "https://example.com/engineering/rfcs/rfc-042"
   ],
-  "summary": "Maximum-complexity template: all root-level optional fields, meta extensions, every section type with multiple items, optional fields on child objects (notes, categories, CTAs, timeline dates, quote roles, stat context), and generic sections mixing all block kinds with URIs and heterogeneous stat values.",
+  "summary": "Kitchen-sink example aligned with JSON_Schema.json: required fields (rank, headline, sections) plus optional date_confirmed, sources_confirmed, summary, and meta. Sections demonstrate bullet_list (text + optional note), cards (category, title, description, cta_label, cta_url), timeline (date optional), quotes (speaker, role), stats (string or number value, context), links (label, url, source), and generic blocks (bullet, text, link, stat, quote). Meta uses documented keys plus extra keys allowed by additionalProperties.",
   "meta": {
     "topic": "Cross-functional program",
     "audience": "C-suite, product, eng, legal",
@@ -159,7 +159,7 @@
         },
         {
           "kind": "text",
-          "text": "End of maximum-complexity example — ids stay lowercase alphanumeric with hyphens; URIs validate; sources_confirmed entries are unique."
+          "text": "End of schema showcase — ids stay lowercase alphanumeric with hyphens; URIs validate; sources_confirmed entries are unique."
         }
       ]
     }

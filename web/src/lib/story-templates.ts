@@ -1,4 +1,4 @@
-/** Story Frame examples under `/public/templates/` (mirrors repo `/templates/`). */
+/** Story Frame examples served from `web/public/templates/` as `/templates/*.json`. */
 export const STORY_FRAME_TEMPLATES = [
   { file: "01-minimal.json", label: "01 · Minimal" },
   { file: "02-bullet-list-with-notes.json", label: "02 · Bullet list + notes" },
