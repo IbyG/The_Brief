@@ -27,7 +27,7 @@ End-to-end flow: an external process writes Story Frame JSON into the data folde
 ### UI
 
 #### Stories Page
-When opening up the app you see the daily stories that have been ingested to the app via external sources/
+When opening up the app you see the daily stories that have been ingested to the app via external sources.
 ![Stories Page](docs/readme/assets/storiespage1.png)
 
 you can also filter by date 
@@ -91,11 +91,4 @@ cd web && npm install && npm run dev
 
 ---
 
-## Examples
 
-Add links to **your** other portfolio projects here (same idea as the original template—recruiters skim for breadth):
-
-- *(your project name — GitHub or live demo)*
-- *(another project)*
-
-**Further reading in this repo:** [Documentation_References/PRD.md](Documentation_References/PRD.md) · [web/README.md](web/README.md)
