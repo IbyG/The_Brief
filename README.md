@@ -3,6 +3,7 @@
 **The Brief** is a single web dashboard that replaces a fragmented morning routine: instead of opening several tools or scripts to see what matters, you open one place and get a consistent, prioritised, editorial-style feed of structured updates. It reads validated JSON “story frames” from a folder on disk (no database in v1), renders a central feed and story views, and includes templating tools so authors can validate JSON before it ever hits `/data`.
 
 **Link to project:** run it locally and open [http://localhost:3000](http://localhost:3000) after `docker compose up` or `npm run dev` from `web/` (see [Quick start](#quick-start)). 
+
 ---
 
 ## How it’s made
