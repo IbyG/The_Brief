@@ -2,10 +2,7 @@
 
 **The Brief** is a single web dashboard that replaces a fragmented morning routine: instead of opening several tools or scripts to see what matters, you open one place and get a consistent, prioritised, editorial-style feed of structured updates. It reads validated JSON “story frames” from a folder on disk (no database in v1), renders a central feed and story views, and includes templating tools so authors can validate JSON before it ever hits `/data`.
 
-**Link to project:** run it locally and open [http://localhost:3000](http://localhost:3000) after `docker compose up` or `npm run dev` from `web/` (see [Quick start](#quick-start)). *Add your deployed URL here when you ship a public demo—recruiters love a live link.*
-
-![The Brief — editorial dashboard concept (hero banner)](docs/readme/assets/the-brief-showcase-hero.png)
-
+**Link to project:** run it locally and open [http://localhost:3000](http://localhost:3000) after `docker compose up` or `npm run dev` from `web/` (see [Quick start](#quick-start)). 
 ---
 
 ## How it’s made
@@ -29,8 +26,23 @@ End-to-end flow: an external process writes Story Frame JSON into the data folde
 ### UI
 
 #### Stories Page
-![Architecture flow: External app → JSON → /data → The Brief UI](docs/readme/assets/storiespage1.png)
+When opening up the app you see the daily stories that have been ingested to the app via external sources/
+![Stories Page](docs/readme/assets/storiespage1.png)
 
+you can also filter by date 
+![Stories Page Filter by date](docs/readme/assets/storiespagefilterbydate.png)
+
+
+#### Templating Page
+This is where you can generate and review your JSON files to see how it looks before committing. 
+![Templating Page](docs/readme/assets/templatingpage1.png)
+
+
+There are 10 predefined templates you can use varying in complexity
+![Templating Page Templates](docs/readme/assets/templatingpagetemplates.png)
+
+You also have the ability to add predefined content blocks by clicking on "Select Block"
+![Templating Page Blocks](docs/readme/assets/templatingpagesections.png)
 
 ---
 
