@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import type { StoryFrame } from "@/types/story-frame";
-import { dailyBriefBasenameForIsoDate } from "@/lib/daily-brief";
+import { dailyBriefBasenameForIsoDate, isoDateFromBriefFilename } from "@/lib/daily-brief";
 import { getBriefDataDir } from "@/lib/paths";
 import { formatAjvErrors, validateStoryJson } from "@/lib/validate-story";
 import { logIngest, type IngestPhase } from "@/lib/ingest-log";
@@ -23,12 +23,12 @@ export interface BriefsResult {
   dataDir: string;
   loadedAt: string;
   dailyBriefBasename: string | null;
-  /** True when `dailyBriefBasename` exists on disk (metadata only; the feed always merges every valid `*.json`). */
+  /** True when `dailyBriefBasename` exists on disk. */
   dailyBriefFilePresent: boolean;
-  /** Kept for API stability; always false (daily files are merged with all other stories). */
+  /** Kept for API stability; always false. */
   dailyBriefActive: false;
-  /** Kept for API stability; always `"all"`. */
-  scope: "all";
+  /** Stories are limited to JSON files whose names encode this calendar day (`*_DD-MM-YYYY.json`). */
+  scope: "day";
   stories: LoadedStory[];
   errors: IngestError[];
 }
@@ -138,7 +138,7 @@ export async function loadBriefs(options: LoadBriefsOptions): Promise<BriefsResu
       dailyBriefBasename,
       dailyBriefFilePresent: false,
       dailyBriefActive: false,
-      scope: "all",
+      scope: "day",
       stories: [],
       errors,
     };
@@ -148,8 +148,12 @@ export async function loadBriefs(options: LoadBriefsOptions): Promise<BriefsResu
     (n) => n.toLowerCase().endsWith(".json") && !n.startsWith("."),
   );
 
+  const jsonFilesForDate = jsonFiles.filter(
+    (n) => isoDateFromBriefFilename(n) === options.isoDate,
+  );
+
   const stories: LoadedStory[] = [];
-  for (const name of jsonFiles.sort((a, b) => a.localeCompare(b))) {
+  for (const name of jsonFilesForDate.sort((a, b) => a.localeCompare(b))) {
     const loaded = await readOneJsonFile(dataDir, name, errors);
     if (loaded) {
       stories.push(loaded);
@@ -166,7 +170,7 @@ export async function loadBriefs(options: LoadBriefsOptions): Promise<BriefsResu
     dailyBriefBasename,
     dailyBriefFilePresent: dailyPresent,
     dailyBriefActive: false,
-    scope: "all",
+    scope: "day",
     stories,
     errors,
   };

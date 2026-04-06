@@ -39,17 +39,36 @@ export default async function HomePage({
         {displayStories.length === 0 ? (
           <div className="rounded-xl bg-surface-container-low p-10 text-center shadow-inner">
             <p className="text-lg font-bold text-on-surface">
-              {result.stories.length === 0 ? "No briefs yet" : "No briefs for this tag"}
+              {result.stories.length === 0
+                ? isoDate === isoDateTodayUtc()
+                  ? "No briefs yet"
+                  : "No briefs for this date"
+                : "No briefs for this tag"}
             </p>
             <p className="mt-2 text-on-surface-variant">
               {result.stories.length === 0 ? (
                 <>
-                  Add valid <span className="font-mono">*.json</span> Story Frame files to{" "}
-                  <span className="font-mono">{result.dataDir}</span> or open{" "}
-                  <Link className="font-semibold text-primary underline" href="/templating">
-                    Templating
-                  </Link>{" "}
-                  to draft JSON.
+                  {isoDate === isoDateTodayUtc() ? (
+                    <>
+                      Add valid <span className="font-mono">*_DD-MM-YYYY.json</span> Story Frame files
+                      to <span className="font-mono">{result.dataDir}</span> (see{" "}
+                      <span className="font-mono">daily_brief_DD-MM-YYYY.json</span>) or open{" "}
+                      <Link className="font-semibold text-primary underline" href="/templating">
+                        Templating
+                      </Link>{" "}
+                      to draft JSON.
+                    </>
+                  ) : (
+                    <>
+                      Nothing on disk for this day yet. Pick another date, add files named like{" "}
+                      <span className="font-mono">daily_brief_DD-MM-YYYY.json</span> under{" "}
+                      <span className="font-mono">{result.dataDir}</span>, or open{" "}
+                      <Link className="font-semibold text-primary underline" href="/templating">
+                        Templating
+                      </Link>
+                      .
+                    </>
+                  )}
                 </>
               ) : (
                 <>
