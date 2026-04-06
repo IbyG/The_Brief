@@ -1,22 +1,26 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo, useRef } from "react";
 import { isoDateTodayUtc } from "@/lib/daily-brief";
 
 function formatLabel(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
   if (!y || !m || !d) return iso;
   const date = new Date(y, m - 1, d);
-  return date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return date
+    .toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
+    .toUpperCase();
 }
 
 export function HeaderDate() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const iso = useMemo(() => {
     const raw = searchParams.get("date");
@@ -36,7 +40,8 @@ export function HeaderDate() {
           next.set("tag", tag);
         }
         const q = next.toString();
-        router.push(q ? `/?${q}` : "/");
+        const dest = q ? `${pathname}?${q}` : pathname;
+        router.push(dest);
         return;
       }
       next.set("date", v);
@@ -44,23 +49,56 @@ export function HeaderDate() {
       if (tag) {
         next.set("tag", tag);
       }
-      router.push(`/?${next.toString()}`);
+      router.push(`${pathname}?${next.toString()}`);
     },
-    [router, searchParams],
+    [router, pathname, searchParams],
   );
 
+  const openPicker = useCallback(() => {
+    const el = inputRef.current;
+    if (!el) {
+      return;
+    }
+    if (typeof el.showPicker === "function") {
+      try {
+        el.showPicker();
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+    el.focus();
+    /* Same user gesture: helps Safari / older engines open the native UI */
+    el.click();
+  }, []);
+
+  const label = formatLabel(iso);
+
   return (
-    <div className="relative -mt-0.5 flex items-center">
+    <div className="relative -mt-0.5 inline-flex max-w-full items-center">
+      {/*
+        The native date popup anchors to this input’s bounding box. Keep it stacked behind the
+        label (same inset as the button) — do not use fixed top/left, or the calendar appears in
+        the viewport corner.
+      */}
       <input
-        className="absolute inset-0 cursor-pointer opacity-0"
+        ref={inputRef}
+        id="header-brief-date"
         type="date"
         value={iso}
         onChange={onChange}
-        aria-label="Brief date"
+        tabIndex={-1}
+        className="pointer-events-none absolute inset-0 z-0 h-full min-h-[1.25rem] w-full opacity-0"
+        aria-hidden
       />
-      <span className="pointer-events-none text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
-        {formatLabel(iso)}
-      </span>
+      <button
+        type="button"
+        onClick={openPicker}
+        className="relative z-10 cursor-pointer border-0 bg-transparent p-0 text-left text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant transition hover:text-on-surface hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-surface/80 rounded-sm"
+        aria-label={`Brief date ${label}, choose another date`}
+      >
+        {label}
+      </button>
     </div>
   );
 }
