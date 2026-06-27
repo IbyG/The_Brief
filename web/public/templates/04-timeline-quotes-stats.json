@@ -1,14 +1,15 @@
 {
   "rank": 4,
   "headline": "Timeline, quotes, and stats",
+  "date_confirmed": "April 4, 2026",
   "sections": [
     {
       "id": "chronology",
       "type": "timeline",
       "title": "What happened",
       "items": [
-        { "date": "2026-04-01", "text": "Kickoff and scope lock." },
-        { "date": "2026-04-03", "text": "First integration build green in CI." },
+        { "date": "01-04-2026", "text": "Kickoff and scope lock." },
+        { "date": "3 Apr 2026", "text": "First integration build green in CI." },
         { "text": "Timeline items can omit date when the order alone is enough." }
       ]
     },
@@ -32,10 +33,25 @@
       "id": "metrics",
       "type": "stats",
       "title": "By the numbers",
+      "columns": 2,
       "items": [
-        { "label": "Uptime (30d)", "value": "99.97%", "context": "rolling window" },
-        { "label": "Latency p95 (ms)", "value": 42.7, "context": "API gateway" },
-        { "label": "Open incidents", "value": "0" }
+        {
+          "label": "Uptime (30d)",
+          "value": "99.97%",
+          "contexts": ["rolling window", "all regions"],
+          "color": "success"
+        },
+        {
+          "label": "Latency p95 (ms)",
+          "value": 42.7,
+          "context": "API gateway",
+          "color": "secondary"
+        },
+        {
+          "label": "Open incidents",
+          "value": 0,
+          "highlight": true
+        }
       ]
     }
   ]

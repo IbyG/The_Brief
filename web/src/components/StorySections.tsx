@@ -1,35 +1,112 @@
-import type { ContentBlock, Section } from "@/types/story-frame";
+import type { ContentBlock, DisplayStyle, Section } from "@/types/story-frame";
+import { RichText, RichTextQuote } from "@/components/RichText";
+import {
+  formatDisplayValue,
+  itemSurfaceClass,
+  itemSurfaceStyle,
+  itemValueClass,
+  itemValueStyle,
+  resolveContexts,
+  sectionGridClass,
+} from "@/lib/story-display";
 import { safeHttpUrl } from "@/lib/safe-url";
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionTitle({ children }: { children: string }) {
   return (
     <h3 className="text-primary mb-6 flex items-center gap-3 text-sm font-black uppercase tracking-[0.2em]">
-      {children}
+      <RichText as="span">{children}</RichText>
     </h3>
+  );
+}
+
+function ContextLines({ contexts }: { contexts: string[] }) {
+  if (contexts.length === 0) {
+    return null;
+  }
+  return (
+    <div className="mt-1 space-y-0.5">
+      {contexts.map((ctx, i) => (
+        <RichText key={i} as="p" className="text-sm text-on-surface-variant">
+          {ctx}
+        </RichText>
+      ))}
+    </div>
+  );
+}
+
+function StyledSurface({
+  style,
+  className,
+  children,
+}: {
+  style?: DisplayStyle;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={`${itemSurfaceClass(style)}${className ? ` ${className}` : ""}`}
+      style={itemSurfaceStyle(style)}
+    >
+      {children}
+    </div>
+  );
+}
+
+function StatValue({
+  value,
+  style,
+  className,
+}: {
+  value: string | number | boolean;
+  style?: DisplayStyle;
+  className: string;
+}) {
+  if (typeof value === "string") {
+    return (
+      <RichText as="dd" className={className} style={itemValueStyle(style)}>
+        {value}
+      </RichText>
+    );
+  }
+  return (
+    <dd className={className} style={itemValueStyle(style)}>
+      {formatDisplayValue(value)}
+    </dd>
   );
 }
 
 function BulletListSection({
   title,
+  description,
   items,
 }: {
   title: string;
-  items: { text: string; note?: string }[];
+  description?: string;
+  items: { text: string; note?: string; color?: string; highlight?: boolean }[];
 }) {
   return (
     <section>
       <SectionTitle>{title}</SectionTitle>
+      {description ? (
+        <RichText as="p" className="mb-4 text-sm text-on-surface-variant">
+          {description}
+        </RichText>
+      ) : null}
       <ul className="space-y-4">
         {items.map((item, i) => (
           <li key={i} className="group/item flex items-start gap-4">
             <span
               className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
               aria-hidden
+              style={item.color?.startsWith("#") ? { backgroundColor: item.color } : undefined}
             />
             <div className="text-on-surface leading-relaxed">
-              <p>{item.text}</p>
+              <RichText as="p">{item.text}</RichText>
               {item.note ? (
-                <p className="mt-1 text-sm text-on-surface-variant">{item.note}</p>
+                <RichText as="p" className="mt-1 text-sm text-on-surface-variant">
+                  {item.note}
+                </RichText>
               ) : null}
             </div>
           </li>
@@ -50,6 +127,12 @@ function CardsSection({
     description: string;
     cta_label?: string;
     cta_url?: string;
+    context?: string | string[];
+    contexts?: string[];
+    color?: string;
+    accent?: string;
+    variant?: string;
+    highlight?: boolean;
   }[];
 }) {
   return (
@@ -58,18 +141,21 @@ function CardsSection({
       <div className="space-y-4">
         {items.map((c, i) => {
           const cta = c.cta_url ? safeHttpUrl(c.cta_url) : "";
+          const contexts = resolveContexts(c);
           return (
-            <div
-              key={i}
-              className="rounded-xl bg-surface-container-low p-5 shadow-[0_12px_24px_rgba(0,0,0,0.04)]"
-            >
+            <StyledSurface key={i} style={c}>
               {c.category ? (
-                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-secondary">
+                <RichText as="p" className="mb-2 text-xs font-bold uppercase tracking-wide text-secondary">
                   {c.category}
-                </p>
+                </RichText>
               ) : null}
-              <p className="text-lg font-bold text-on-surface">{c.title}</p>
-              <p className="mt-2 text-on-surface-variant">{c.description}</p>
+              <RichText as="p" className="text-lg font-bold text-on-surface">
+                {c.title}
+              </RichText>
+              <RichText as="p" className="mt-2 text-on-surface-variant">
+                {c.description}
+              </RichText>
+              <ContextLines contexts={contexts} />
               {c.cta_label && cta ? (
                 <a
                   href={cta}
@@ -77,10 +163,10 @@ function CardsSection({
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  {c.cta_label}
+                  <RichText as="span">{c.cta_label}</RichText>
                 </a>
               ) : null}
-            </div>
+            </StyledSurface>
           );
         })}
       </div>
@@ -93,7 +179,7 @@ function LinksSection({
   items,
 }: {
   title: string;
-  items: { label: string; url: string; source?: string }[];
+  items: { label: string; url: string; source?: string; color?: string }[];
 }) {
   return (
     <section>
@@ -101,22 +187,28 @@ function LinksSection({
       <ul className="space-y-3">
         {items.map((item, i) => {
           const href = safeHttpUrl(item.url);
+          const linkStyle = item.color?.startsWith("#") ? { color: item.color } : undefined;
           return (
             <li key={i}>
               {href ? (
                 <a
                   href={href}
                   className="font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2"
+                  style={linkStyle}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  {item.label}
+                  <RichText as="span">{item.label}</RichText>
                 </a>
               ) : (
-                <span className="font-semibold text-on-surface-variant">{item.label}</span>
+                <RichText as="span" className="font-semibold text-on-surface-variant">
+                  {item.label}
+                </RichText>
               )}
               {item.source ? (
-                <span className="ml-2 text-sm text-on-surface-variant">({item.source})</span>
+                <span className="ml-2 text-sm text-on-surface-variant">
+                  (<RichText as="span">{item.source}</RichText>)
+                </span>
               ) : null}
             </li>
           );
@@ -131,7 +223,7 @@ function TimelineSection({
   items,
 }: {
   title: string;
-  items: { date?: string; text: string }[];
+  items: { date?: string; text: string; color?: string }[];
 }) {
   return (
     <section>
@@ -140,11 +232,19 @@ function TimelineSection({
         {items.map((item, i) => (
           <li key={i} className="flex gap-4">
             {item.date ? (
-              <span className="w-24 shrink-0 text-sm font-bold text-secondary">{item.date}</span>
+              <RichText
+                as="span"
+                className="w-24 shrink-0 text-sm font-bold text-secondary"
+                style={item.color?.startsWith("#") ? { color: item.color } : undefined}
+              >
+                {item.date}
+              </RichText>
             ) : (
               <span className="w-24 shrink-0" />
             )}
-            <p className="text-on-surface leading-relaxed">{item.text}</p>
+            <RichText as="p" className="text-on-surface leading-relaxed">
+              {item.text}
+            </RichText>
           </li>
         ))}
       </ul>
@@ -157,19 +257,34 @@ function QuotesSection({
   items,
 }: {
   title: string;
-  items: { quote: string; speaker?: string; role?: string }[];
+  items: { quote: string; speaker?: string; role?: string; color?: string }[];
 }) {
   return (
     <section>
       <SectionTitle>{title}</SectionTitle>
       <ul className="space-y-6">
         {items.map((item, i) => (
-          <li key={i} className="border-l-4 border-primary/30 pl-4">
-            <blockquote className="text-lg italic text-on-surface">&ldquo;{item.quote}&rdquo;</blockquote>
+          <li
+            key={i}
+            className="border-l-4 border-primary/30 pl-4"
+            style={
+              item.color?.startsWith("#")
+                ? { borderLeftColor: `${item.color}66` }
+                : undefined
+            }
+          >
+            <RichTextQuote className="text-lg italic text-on-surface">
+              {item.quote}
+            </RichTextQuote>
             {(item.speaker || item.role) && (
               <p className="mt-2 text-sm text-on-surface-variant">
-                {item.speaker}
-                {item.role ? <span className="text-on-surface-variant"> — {item.role}</span> : null}
+                {item.speaker ? <RichText as="span">{item.speaker}</RichText> : null}
+                {item.role ? (
+                  <span className="text-on-surface-variant">
+                    {" "}
+                    — <RichText as="span">{item.role}</RichText>
+                  </span>
+                ) : null}
               </p>
             )}
           </li>
@@ -182,23 +297,41 @@ function QuotesSection({
 function StatsSection({
   title,
   items,
+  columns,
 }: {
   title: string;
-  items: { label: string; value: string | number; context?: string }[];
+  items: {
+    label: string;
+    value: string | number | boolean;
+    context?: string | string[];
+    contexts?: string[];
+    color?: string;
+    accent?: string;
+    variant?: string;
+    highlight?: boolean;
+  }[];
+  columns?: number;
 }) {
   return (
     <section>
       <SectionTitle>{title}</SectionTitle>
-      <dl className="grid gap-4 sm:grid-cols-2">
-        {items.map((item, i) => (
-          <div key={i} className="rounded-xl bg-surface-container-low p-4">
-            <dt className="text-sm text-on-surface-variant">{item.label}</dt>
-            <dd className="mt-1 text-2xl font-black text-on-surface">{item.value}</dd>
-            {item.context ? (
-              <p className="mt-1 text-sm text-on-surface-variant">{item.context}</p>
-            ) : null}
-          </div>
-        ))}
+      <dl className={sectionGridClass(columns)}>
+        {items.map((item, i) => {
+          const contexts = resolveContexts(item);
+          return (
+            <StyledSurface key={i} style={item}>
+              <RichText as="dt" className="text-sm text-on-surface-variant">
+                {item.label}
+              </RichText>
+              <StatValue
+                value={item.value}
+                style={item}
+                className={`mt-1 text-2xl font-black ${itemValueClass(item)}`}
+              />
+              <ContextLines contexts={contexts} />
+            </StyledSurface>
+          );
+        })}
       </dl>
     </section>
   );
@@ -212,15 +345,17 @@ function ContentBlocks({ blocks }: { blocks: ContentBlock[] }) {
           return (
             <div key={i} className="flex gap-3">
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
-              <p className="text-on-surface leading-relaxed">{b.text}</p>
+              <RichText as="p" className="text-on-surface leading-relaxed">
+                {b.text}
+              </RichText>
             </div>
           );
         }
         if (b.kind === "text") {
           return (
-            <p key={i} className="text-on-surface leading-relaxed">
+            <RichText key={i} as="p" className="text-on-surface leading-relaxed">
               {b.text}
-            </p>
+            </RichText>
           );
         }
         if (b.kind === "link") {
@@ -234,32 +369,55 @@ function ContentBlocks({ blocks }: { blocks: ContentBlock[] }) {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  {b.label}
+                  <RichText as="span">{b.label}</RichText>
                 </a>
               ) : (
-                <span className="font-semibold">{b.label}</span>
+                <RichText as="span" className="font-semibold">
+                  {b.label}
+                </RichText>
               )}
             </p>
           );
         }
         if (b.kind === "stat") {
+          const contexts = resolveContexts(b);
           return (
-            <div key={i} className="rounded-lg bg-surface-container-low p-3">
-              <p className="text-sm text-on-surface-variant">{b.label}</p>
-              <p className="text-xl font-bold text-on-surface">{b.value}</p>
-            </div>
+            <StyledSurface key={i} style={b}>
+              <RichText as="p" className="text-sm text-on-surface-variant">
+                {b.label}
+              </RichText>
+              {typeof b.value === "string" ? (
+                <RichText
+                  as="p"
+                  className={`text-xl font-bold ${itemValueClass(b)}`}
+                  style={itemValueStyle(b)}
+                >
+                  {b.value}
+                </RichText>
+              ) : (
+                <p
+                  className={`text-xl font-bold ${itemValueClass(b)}`}
+                  style={itemValueStyle(b)}
+                >
+                  {formatDisplayValue(b.value)}
+                </p>
+              )}
+              <ContextLines contexts={contexts} />
+            </StyledSurface>
           );
         }
         if (b.kind === "quote") {
           return (
-            <blockquote key={i} className="border-l-4 border-primary/30 pl-4 italic text-on-surface">
-              &ldquo;{b.quote}&rdquo;
+            <div key={i}>
+              <RichTextQuote className="border-l-4 border-primary/30 pl-4 italic text-on-surface">
+                {b.quote}
+              </RichTextQuote>
               {b.speaker ? (
                 <footer className="mt-2 text-sm not-italic text-on-surface-variant">
-                  — {b.speaker}
+                  — <RichText as="span">{b.speaker}</RichText>
                 </footer>
               ) : null}
-            </blockquote>
+            </div>
           );
         }
         return null;
@@ -268,10 +426,23 @@ function ContentBlocks({ blocks }: { blocks: ContentBlock[] }) {
   );
 }
 
-function GenericSection({ title, items }: { title: string; items: ContentBlock[] }) {
+function GenericSection({
+  title,
+  description,
+  items,
+}: {
+  title: string;
+  description?: string;
+  items: ContentBlock[];
+}) {
   return (
     <section>
       <SectionTitle>{title}</SectionTitle>
+      {description ? (
+        <RichText as="p" className="mb-4 text-sm text-on-surface-variant">
+          {description}
+        </RichText>
+      ) : null}
       <ContentBlocks blocks={items} />
     </section>
   );
@@ -287,6 +458,7 @@ export function StorySections({ sections }: { sections: Section[] }) {
               <BulletListSection
                 key={section.id}
                 title={section.title}
+                description={section.description}
                 items={section.items}
               />
             );
@@ -308,11 +480,21 @@ export function StorySections({ sections }: { sections: Section[] }) {
             );
           case "stats":
             return (
-              <StatsSection key={section.id} title={section.title} items={section.items} />
+              <StatsSection
+                key={section.id}
+                title={section.title}
+                items={section.items}
+                columns={section.columns}
+              />
             );
           case "generic":
             return (
-              <GenericSection key={section.id} title={section.title} items={section.items} />
+              <GenericSection
+                key={section.id}
+                title={section.title}
+                description={section.description}
+                items={section.items}
+              />
             );
         }
       })}

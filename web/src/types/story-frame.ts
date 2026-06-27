@@ -9,54 +9,74 @@ export type SectionType =
   | "stats"
   | "generic";
 
-export interface BulletItem {
+export interface DisplayStyle {
+  color?: string;
+  accent?: string;
+  variant?: string;
+  highlight?: boolean;
+}
+
+export type ContextField = string | string[];
+
+export interface BulletItem extends DisplayStyle {
   text: string;
   note?: string;
 }
 
-export interface CardItem {
+export interface CardItem extends DisplayStyle {
   category?: string;
   title: string;
   description: string;
   cta_label?: string;
   cta_url?: string;
+  context?: ContextField;
+  contexts?: string[];
 }
 
-export interface LinkItem {
+export interface LinkItem extends DisplayStyle {
   label: string;
   url: string;
   source?: string;
 }
 
-export interface TimelineItem {
+export interface TimelineItem extends DisplayStyle {
   date?: string;
   text: string;
 }
 
-export interface QuoteItem {
+export interface QuoteItem extends DisplayStyle {
   quote: string;
   speaker?: string;
   role?: string;
 }
 
-export interface StatItem {
+export interface StatItem extends DisplayStyle {
   label: string;
-  value: string | number;
-  context?: string;
+  value: string | number | boolean;
+  context?: ContextField;
+  contexts?: string[];
 }
 
 export type ContentBlock =
-  | { kind: "bullet"; text: string }
-  | { kind: "text"; text: string }
-  | { kind: "link"; label: string; url: string }
-  | { kind: "stat"; label: string; value: string | number }
-  | { kind: "quote"; quote: string; speaker?: string };
+  | ({ kind: "bullet"; text: string } & DisplayStyle)
+  | ({ kind: "text"; text: string } & DisplayStyle)
+  | ({ kind: "link"; label: string; url: string } & DisplayStyle)
+  | ({
+      kind: "stat";
+      label: string;
+      value: string | number | boolean;
+      context?: ContextField;
+      contexts?: string[];
+    } & DisplayStyle)
+  | ({ kind: "quote"; quote: string; speaker?: string } & DisplayStyle);
 
 export interface BaseSection {
   id: string;
   type: SectionType;
   title: string;
   description?: string;
+  layout?: string;
+  columns?: number;
 }
 
 export type Section =
@@ -73,10 +93,11 @@ export interface StoryMeta {
   audience?: string;
   priority?: string;
   tags?: string[];
+  [key: string]: unknown;
 }
 
 export interface StoryFrame {
-  rank: number;
+  rank?: number;
   headline: string;
   date_confirmed?: string;
   sources_confirmed?: string[];

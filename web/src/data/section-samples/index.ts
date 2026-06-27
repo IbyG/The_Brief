@@ -15,7 +15,7 @@ export interface SectionSampleEntry {
   section: Section;
 }
 
-/** Sample sections aligned with `Documentation_References/JSON References/JSON_Schema.json`. */
+/** Sample sections for the Select Block picker — aligned with the flexible Story Frame schema. */
 export const SECTION_SAMPLES: readonly SectionSampleEntry[] = [
   {
     type: "bullet_list",
@@ -26,7 +26,7 @@ export const SECTION_SAMPLES: readonly SectionSampleEntry[] = [
   {
     type: "cards",
     label: "Cards",
-    description: "Title, description, optional category and outbound CTA.",
+    description: "Title, description, optional contexts, color, category, and CTA.",
     section: cards as Section,
   },
   {
@@ -38,7 +38,7 @@ export const SECTION_SAMPLES: readonly SectionSampleEntry[] = [
   {
     type: "timeline",
     label: "Timeline",
-    description: "Dated or undated events in order.",
+    description: "Events in any date format, or undated when order is enough.",
     section: timeline as Section,
   },
   {
@@ -50,7 +50,7 @@ export const SECTION_SAMPLES: readonly SectionSampleEntry[] = [
   {
     type: "stats",
     label: "Stats",
-    description: "Label / value pairs with optional context.",
+    description: "Label/value with contexts, colors, columns, and mixed types.",
     section: stats as Section,
   },
   {

@@ -6,7 +6,9 @@
     {
       "category": "Context",
       "title": "Market signal",
-      "description": "Cards pair a title with supporting copy; optional category and CTA link out.",
+      "description": "Cards pair a title with supporting copy. Add contexts, color, category, and CTA as needed.",
+      "contexts": ["Optional footnote", "Second context line"],
+      "color": "primary",
       "cta_label": "Read more",
       "cta_url": "https://example.com/article"
     }

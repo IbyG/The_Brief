@@ -1,12 +1,11 @@
 {
-  "rank": 5,
   "headline": "All optional root fields",
-  "date_confirmed": "2026-04-05",
+  "date_confirmed": "05-04-2026",
   "sources_confirmed": [
     "https://example.com/internal/briefs/2026-04-05",
     "https://example.com/wiki/runbook-oncall"
   ],
-  "summary": "Demonstrates date_confirmed (ISO date), unique sources_confirmed URLs, summary text, and meta for topic, audience, priority, and tags.",
+  "summary": "Demonstrates optional rank, date_confirmed in any format, sources_confirmed URLs, summary text, and meta. Only headline and sections are required.",
   "meta": {
     "topic": "Operations",
     "audience": "Leads and ICs",
@@ -19,8 +18,10 @@
       "type": "bullet_list",
       "title": "Why this template exists",
       "items": [
+        { "text": "rank is optional — omit it or use 1, 2, 3… to control feed order." },
+        { "text": "date_confirmed accepts any display format (05-04-2026, 2026-04-05, April 5 2026)." },
         { "text": "sources_confirmed must list unique strings (often URLs)." },
-        { "text": "meta can include topic, audience, priority, and tags arrays." }
+        { "text": "meta can include topic, audience, priority, tags, and custom keys." }
       ]
     }
   ]

@@ -1,13 +1,13 @@
 {
   "rank": 9,
   "headline": "Evidence-heavy brief: stats, links, quotes, generic proof",
-  "date_confirmed": "2026-04-05",
+  "date_confirmed": "04/05/2026",
   "sources_confirmed": [
     "https://example.com/incidents/2026-04",
     "https://example.com/compliance/soc2-summary",
     "https://example.com/blog/postmortem-culture"
   ],
-  "summary": "Combines stat value types (string, integer, number), sourced links, attributed quotes, and a generic section that weaves bullets and stats like a mini report.",
+  "summary": "Combines stat value types (string, number, boolean), multiple contexts per card, colors, sourced links, quotes, and generic blocks with embedded stats.",
   "meta": {
     "topic": "Reliability & compliance",
     "audience": "Security + SRE",
@@ -19,11 +19,31 @@
       "id": "incident-stats",
       "type": "stats",
       "title": "Incident and compliance indicators",
+      "columns": 2,
       "items": [
-        { "label": "Customer-visible incidents (30d)", "value": "2", "context": "both SEV-3" },
-        { "label": "MTTR (hours)", "value": 1.4, "context": "mean across incidents" },
-        { "label": "Control tests passed", "value": "47/47", "context": "SOC 2 Type II period" },
-        { "label": "Open audit findings", "value": "0" }
+        {
+          "label": "Customer-visible incidents (30d)",
+          "value": 2,
+          "contexts": ["both SEV-3", "No data loss"],
+          "color": "warning"
+        },
+        {
+          "label": "MTTR (hours)",
+          "value": 1.4,
+          "context": "mean across incidents",
+          "color": "secondary"
+        },
+        {
+          "label": "Control tests passed",
+          "value": "47/47",
+          "contexts": ["SOC 2 Type II period", "All controls green"],
+          "color": "success"
+        },
+        {
+          "label": "Open audit findings",
+          "value": 0,
+          "highlight": true
+        }
       ]
     },
     {
@@ -75,8 +95,19 @@
           "text": "Below, bullets summarize actions; stats restate numbers for scanners and accessibility."
         },
         { "kind": "bullet", "text": "Pager noise reduced after deduplicating alerts on the payment service." },
-        { "kind": "stat", "label": "Alert volume (weekly)", "value": "940" },
-        { "kind": "stat", "label": "Noise ratio", "value": "12%" },
+        {
+          "kind": "stat",
+          "label": "Alert volume (weekly)",
+          "value": 940,
+          "contexts": ["Down 18% WoW", "Payment service only"],
+          "color": "primary"
+        },
+        {
+          "kind": "stat",
+          "label": "Noise ratio",
+          "value": "12%",
+          "color": "success"
+        },
         {
           "kind": "link",
           "label": "Alerting standards",

@@ -2,8 +2,31 @@
   "id": "sample-stats",
   "type": "stats",
   "title": "By the numbers",
+  "columns": 2,
   "items": [
-    { "label": "Stories filed", "value": 42, "context": "This week" },
-    { "label": "Avg. read time", "value": "3m" }
+    {
+      "label": "Stories filed",
+      "value": 42,
+      "contexts": ["This week", "Across all desks"],
+      "color": "primary"
+    },
+    {
+      "label": "Avg. read time",
+      "value": "3m",
+      "context": "Median"
+    },
+    {
+      "label": "On track",
+      "value": true,
+      "contexts": ["Program status", "As of Friday standup"],
+      "color": "success",
+      "highlight": true
+    },
+    {
+      "label": "ARR at risk",
+      "value": "$1.2M",
+      "contexts": ["EU region", "if slip > 60 days"],
+      "color": "#ac2b31"
+    }
   ]
 }

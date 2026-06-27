@@ -1,7 +1,7 @@
 {
   "rank": 8,
   "headline": "Long-form narrative with many subsections",
-  "date_confirmed": "2026-04-05",
+  "date_confirmed": "5 April 2026",
   "sources_confirmed": [
     "https://example.com/quarterly/2026-q1",
     "https://example.com/teams/platform/metrics"
@@ -55,8 +55,8 @@
       "type": "timeline",
       "title": "Quarter milestones",
       "items": [
-        { "date": "2026-01-15", "text": "Roadmap committed for H1." },
-        { "date": "2026-02-20", "text": "Security audit completed with no criticals." },
+        { "date": "15 Jan 2026", "text": "Roadmap committed for H1." },
+        { "date": "20-02-2026", "text": "Security audit completed with no criticals." },
         { "date": "2026-03-30", "text": "End-of-quarter freeze and retrospective." },
         { "text": "Next quarter planning begins after this brief is published." }
       ]
@@ -65,11 +65,23 @@
       "id": "kpis",
       "type": "stats",
       "title": "KPI snapshot",
+      "columns": 2,
       "items": [
-        { "label": "ARR growth YoY", "value": "22%", "context": "as of quarter close" },
-        { "label": "NPS", "value": "48", "context": "customer survey" },
-        { "label": "P95 API latency (ms)", "value": 38.2 },
-        { "label": "Critical open bugs", "value": "3", "context": "production" }
+        {
+          "label": "ARR growth YoY",
+          "value": "22%",
+          "contexts": ["as of quarter close", "Global"],
+          "color": "success"
+        },
+        { "label": "NPS", "value": 48, "context": "customer survey", "color": "primary" },
+        { "label": "P95 API latency (ms)", "value": 38.2, "color": "secondary" },
+        {
+          "label": "Critical open bugs",
+          "value": 3,
+          "context": "production",
+          "color": "error",
+          "highlight": true
+        }
       ]
     },
     {

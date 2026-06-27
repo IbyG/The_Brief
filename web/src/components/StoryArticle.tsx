@@ -1,4 +1,5 @@
 import type { LoadedStory } from "@/lib/brief-data";
+import { RichText } from "@/components/RichText";
 import { StorySections } from "@/components/StorySections";
 
 export function StoryArticle({
@@ -13,6 +14,7 @@ export function StoryArticle({
   showSourceFilename?: boolean;
 }) {
   const { story } = entry;
+  const hasRank = typeof story.rank === "number" && story.rank >= 1;
   return (
     <article
       className={
@@ -21,17 +23,18 @@ export function StoryArticle({
           : "relative overflow-hidden rounded-xl border border-outline-variant/10 bg-surface-container-lowest p-0 shadow-[0_12px_24px_rgba(0,0,0,0.04)]"
       }
     >
-      {/* Wireframe: rank flush to card top-left (p-0 on article; padding only on inner body). */}
-      <div className="absolute left-0 top-0 z-[1]">
-        <div className="rounded-br-xl bg-primary px-5 py-2 text-xl font-black italic tracking-tighter text-on-primary">
-          #{story.rank}
+      {hasRank ? (
+        <div className="absolute left-0 top-0 z-[1]">
+          <div className="rounded-br-xl bg-primary px-5 py-2 text-xl font-black italic tracking-tighter text-on-primary">
+            #{story.rank}
+          </div>
         </div>
-      </div>
+      ) : null}
       <div className="relative z-[1] px-8 pb-8 pt-8">
-        <div className="mb-10 mt-8 pl-9">
-          <h2 className="mb-2 text-3xl font-extrabold leading-tight tracking-tight text-on-surface">
+        <div className={`mb-10 mt-8${hasRank ? " pl-9" : ""}`}>
+          <RichText as="h2" className="mb-2 text-3xl font-extrabold leading-tight tracking-tight text-on-surface">
             {story.headline}
-          </h2>
+          </RichText>
           {showSourceFilename ? (
             <p className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-on-surface-variant">
               {entry.filename}
@@ -39,7 +42,11 @@ export function StoryArticle({
           ) : null}
           <div className="flex flex-wrap items-center gap-2 text-sm font-medium text-on-surface-variant">
             {story.date_confirmed ? (
-              <time dateTime={story.date_confirmed}>{story.date_confirmed}</time>
+              /^\d{4}-\d{2}-\d{2}$/.test(story.date_confirmed) ? (
+                <time dateTime={story.date_confirmed}>{story.date_confirmed}</time>
+              ) : (
+                <span>{story.date_confirmed}</span>
+              )
             ) : null}
             {story.sources_confirmed?.length ? (
               <>
@@ -51,7 +58,9 @@ export function StoryArticle({
             ) : null}
           </div>
           {story.summary ? (
-            <p className="mt-4 text-lg leading-relaxed text-on-surface-variant">{story.summary}</p>
+            <RichText as="p" className="mt-4 text-lg leading-relaxed text-on-surface-variant">
+              {story.summary}
+            </RichText>
           ) : null}
           {story.meta?.tags?.length ? (
             <div className="mt-4 flex flex-wrap gap-2">

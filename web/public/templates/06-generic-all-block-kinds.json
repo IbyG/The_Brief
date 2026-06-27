@@ -6,7 +6,7 @@
       "id": "mixed-body",
       "type": "generic",
       "title": "Mixed content blocks",
-      "description": "A generic section uses items as contentBlock: bullet, text, link, stat, or quote.",
+      "description": "Generic sections use items as contentBlock: bullet, text, link, stat, or quote — each supports color and multiple contexts on stats.",
       "items": [
         {
           "kind": "text",
@@ -28,12 +28,15 @@
         {
           "kind": "stat",
           "label": "Adoption",
-          "value": "78%"
+          "value": "78%",
+          "contexts": ["Q1 target", "All teams"],
+          "color": "success"
         },
         {
           "kind": "stat",
           "label": "Teams onboarded",
-          "value": "12"
+          "value": 12,
+          "color": "secondary"
         },
         {
           "kind": "quote",

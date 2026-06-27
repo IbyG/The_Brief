@@ -34,8 +34,16 @@ export interface BriefsResult {
 }
 
 function sortStories(a: LoadedStory, b: LoadedStory): number {
-  if (a.story.rank !== b.story.rank) {
-    return a.story.rank - b.story.rank;
+  const rankA =
+    typeof a.story.rank === "number" && a.story.rank >= 1
+      ? a.story.rank
+      : Number.POSITIVE_INFINITY;
+  const rankB =
+    typeof b.story.rank === "number" && b.story.rank >= 1
+      ? b.story.rank
+      : Number.POSITIVE_INFINITY;
+  if (rankA !== rankB) {
+    return rankA - rankB;
   }
   if (a.basename !== b.basename) {
     return a.basename.localeCompare(b.basename);
@@ -81,7 +89,7 @@ async function readOneJsonFile(
 
   const validated = validateStoryJson(parsed);
   if (!validated.ok) {
-    const lines = formatAjvErrors(validated.errors);
+    const lines = formatAjvErrors(validated.errors, parsed);
     const message = lines.join("; ");
     errors.push({ file: name, phase: "validate", message });
     logIngest({

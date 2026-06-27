@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { formatAjvErrors, validateStoryJson } from "@/lib/validate-story";
+import {
+  formatAjvErrors,
+  validateStoryJson,
+  validateStoryJsonForPreview,
+} from "@/lib/validate-story";
 
 export const runtime = "nodejs";
 
@@ -13,13 +17,12 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-  const raw =
-    typeof body === "object" &&
-    body !== null &&
-    "raw" in body &&
-    typeof (body as { raw: unknown }).raw === "string"
-      ? (body as { raw: string }).raw
-      : "";
+  const payload =
+    typeof body === "object" && body !== null
+      ? (body as { raw?: unknown; mode?: unknown })
+      : {};
+  const raw = typeof payload.raw === "string" ? payload.raw : "";
+  const mode = payload.mode === "strict" ? "strict" : "preview";
 
   let parsed: unknown;
   try {
@@ -33,12 +36,32 @@ export async function POST(request: Request) {
     });
   }
 
+  if (mode === "preview") {
+    const result = validateStoryJsonForPreview(parsed);
+    if (result.ok && result.data) {
+      return NextResponse.json({
+        ok: true as const,
+        data: result.data,
+        warnings: result.warnings,
+      });
+    }
+    return NextResponse.json({
+      ok: false as const,
+      phase: "validate" as const,
+      errors: result.errors.map((issue) =>
+        issue.fix ? `${issue.path}: ${issue.message} — ${issue.fix}` : `${issue.path}: ${issue.message}`,
+      ),
+      issues: result.errors,
+      warnings: result.warnings,
+    });
+  }
+
   const validated = validateStoryJson(parsed);
   if (!validated.ok) {
     return NextResponse.json({
       ok: false as const,
       phase: "validate" as const,
-      errors: formatAjvErrors(validated.errors),
+      errors: formatAjvErrors(validated.errors, parsed),
     });
   }
 

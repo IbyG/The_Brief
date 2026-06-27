@@ -1,7 +1,7 @@
 {
-  "rank": 7,
   "headline": "One section of each type",
-  "summary": "Kitchen-sink layout: bullet_list, cards, links, timeline, quotes, stats, and generic in a single story.",
+  "date_confirmed": "05-04-2026",
+  "summary": "Kitchen-sink layout: every section type with flexible dates, optional rank, stats colors/contexts, and generic blocks.",
   "sections": [
     {
       "id": "bullets",
@@ -16,7 +16,9 @@
       "items": [
         {
           "title": "Card A",
-          "description": "Minimum card is title + description.",
+          "description": "Minimum card is title + description. Add contexts, color, or a CTA as needed.",
+          "contexts": ["Optional context line 1", "Optional context line 2"],
+          "color": "secondary",
           "cta_label": "Details",
           "cta_url": "https://example.com/a"
         }
@@ -34,7 +36,11 @@
       "id": "timeline",
       "type": "timeline",
       "title": "Timeline",
-      "items": [{ "date": "2026-01-01", "text": "Start" }]
+      "items": [
+        { "date": "01 Jan 2026", "text": "Start — dates accept any format." },
+        { "date": "2026-03-15", "text": "ISO style still works." },
+        { "text": "Or omit date when order alone is enough." }
+      ]
     },
     {
       "id": "quotes",
@@ -46,14 +52,35 @@
       "id": "stats",
       "type": "stats",
       "title": "Stats",
-      "items": [{ "label": "Example", "value": "1" }]
+      "columns": 2,
+      "items": [
+        {
+          "label": "Example",
+          "value": "1",
+          "contexts": ["Multiple context lines", "Per stat card"],
+          "color": "primary"
+        },
+        {
+          "label": "On track",
+          "value": true,
+          "context": "Boolean values render as Yes/No",
+          "color": "success"
+        }
+      ]
     },
     {
       "id": "generic",
       "type": "generic",
       "title": "Generic",
       "items": [
-        { "kind": "text", "text": "Closing note as a text block." }
+        { "kind": "text", "text": "Closing note as a text block." },
+        {
+          "kind": "stat",
+          "label": "Inline stat",
+          "value": 42,
+          "contexts": ["Inside generic sections too"],
+          "color": "warning"
+        }
       ]
     }
   ]

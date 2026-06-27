@@ -5,6 +5,7 @@ import { EditorView } from "@codemirror/view";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SectionBlockPickerModal } from "@/app/templating/SectionBlockPickerModal";
+import { TemplateAuthoringGuide } from "@/app/templating/TemplateAuthoringGuide";
 import { StoryArticle } from "@/components/StoryArticle";
 import type { LoadedStory } from "@/lib/brief-data";
 import { STORY_FRAME_TEMPLATES } from "@/lib/story-templates";
@@ -40,14 +41,14 @@ function appendSectionToEditorJson(raw: string, section: Section):
 }
 
 async function validateRemote(raw: string): Promise<
-  | { ok: true; data: StoryFrame }
+  | { ok: true; data: StoryFrame; warnings?: string[] }
   | { ok: false; phase: "parse"; message: string }
-  | { ok: false; phase: "validate"; errors: string[] }
+  | { ok: false; phase: "validate"; errors: string[]; warnings?: string[] }
 > {
   const res = await fetch("/api/validate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ raw }),
+    body: JSON.stringify({ raw, mode: "preview" }),
   });
   return res.json();
 }
@@ -68,8 +69,10 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
   const [debounced, setDebounced] = useState(initialText);
   const [parseError, setParseError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [validationWarnings, setValidationWarnings] = useState<string[]>([]);
   const [story, setStory] = useState<StoryFrame | null>(null);
   const [blockPickerOpen, setBlockPickerOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [sectionInsertError, setSectionInsertError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -87,18 +90,21 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
       if (!data.ok && data.phase === "parse") {
         setParseError(data.message);
         setValidationErrors([]);
+        setValidationWarnings([]);
         setStory(null);
         return;
       }
       if (!data.ok && data.phase === "validate") {
         setParseError(null);
         setValidationErrors(data.errors);
+        setValidationWarnings(data.warnings ?? []);
         setStory(null);
         return;
       }
       if (data.ok) {
         setParseError(null);
         setValidationErrors([]);
+        setValidationWarnings(data.warnings ?? []);
         setStory(data.data);
       }
     })();
@@ -190,7 +196,7 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
               Editor
             </h2>
             <p className="mt-1 text-xs text-on-surface-variant">
-              Story Frame JSON · validated against bundled schema
+              Story Frame JSON · flexible schema with guided validation
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -216,6 +222,13 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
                 </option>
               ))}
             </select>
+            <button
+              type="button"
+              onClick={() => setGuideOpen(true)}
+              className="rounded-lg border border-outline-variant/30 bg-surface-container-highest px-3 py-1.5 text-xs font-semibold text-on-surface shadow-sm transition hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/40"
+            >
+              Field Guide
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -275,13 +288,14 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
           insertError={sectionInsertError}
           onDismissError={() => setSectionInsertError(null)}
         />
+        <TemplateAuthoringGuide open={guideOpen} onClose={() => setGuideOpen(false)} />
       </section>
       <section className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-4 overflow-hidden bg-surface-container-low/50 p-6">
         <div className="min-w-0 shrink-0">
           <h2 className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">
             Live preview
           </h2>
-          <p className="mt-1 text-xs text-on-surface-variant">Debounced validation + render</p>
+          <p className="mt-1 text-xs text-on-surface-variant">Debounced preview · warnings do not block render</p>
         </div>
         <div className="min-h-0 min-w-0 overflow-y-auto overscroll-contain">
           <div className="flex flex-col gap-4 pb-1">
@@ -294,24 +308,41 @@ export function TemplatingClient({ initialText }: { initialText: string }) {
                 </div>
               )}
             </div>
-            {(parseError !== null || validationErrors.length > 0) && (
-              <div
-                className="shrink-0 rounded-xl border border-error/35 bg-surface-container-lowest p-4 shadow-sm"
-                role="region"
-                aria-label="Validation issues"
-              >
-                {parseError ? (
-                  <p className="text-sm text-error" role="alert">
-                    JSON parse: {parseError}
-                  </p>
+            {(parseError !== null || validationErrors.length > 0 || validationWarnings.length > 0) && (
+              <div className="flex shrink-0 flex-col gap-3" role="region" aria-label="Validation issues">
+                {validationWarnings.length > 0 ? (
+                  <div className="rounded-xl border border-secondary/30 bg-secondary-container/20 p-4 shadow-sm">
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wide text-secondary">
+                      Preview adjustments
+                    </p>
+                    <ul className="list-inside list-disc space-y-1.5 text-sm text-on-surface-variant">
+                      {validationWarnings.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
                 ) : null}
-                {!parseError && validationErrors.length > 0 ? (
-                  <ul className="list-inside list-disc space-y-1.5 text-sm text-on-surface-variant" role="status">
-                    {validationErrors.map((e, i) => (
-                      <li key={i}>{e}</li>
-                    ))}
-                  </ul>
-                ) : null}
+                {(parseError !== null || validationErrors.length > 0) && (
+                  <div className="rounded-xl border border-error/35 bg-surface-container-lowest p-4 shadow-sm">
+                    {parseError ? (
+                      <p className="text-sm text-error" role="alert">
+                        JSON parse: {parseError}
+                      </p>
+                    ) : null}
+                    {!parseError && validationErrors.length > 0 ? (
+                      <>
+                        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-error">
+                          Fix these to render preview
+                        </p>
+                        <ul className="list-inside list-disc space-y-2 text-sm text-on-surface-variant" role="status">
+                          {validationErrors.map((e, i) => (
+                            <li key={i}>{e}</li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : null}
+                  </div>
+                )}
               </div>
             )}
           </div>

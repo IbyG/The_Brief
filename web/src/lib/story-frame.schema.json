@@ -3,15 +3,16 @@
     "$id": "https://example.com/schemas/story-frame.schema.json",
     "title": "Story Frame",
     "type": "object",
-    "additionalProperties": false,
-    "date": "dd/mm/yyyy",
-    "time": "hh:mm:ss",
-    "tags": "",
-    "required": ["rank", "headline", "sections"],
+    "additionalProperties": true,
+    "required": ["headline", "sections"],
     "properties": {
       "rank": {
-        "type": "integer",
-        "minimum": 1
+        "description": "Optional display order (lower numbers appear first). Omit or leave empty if not needed.",
+        "oneOf": [
+          { "type": "integer", "minimum": 1 },
+          { "type": "null" },
+          { "type": "string", "maxLength": 0 }
+        ]
       },
       "headline": {
         "type": "string",
@@ -19,7 +20,7 @@
       },
       "date_confirmed": {
         "type": "string",
-        "format": "date"
+        "description": "Display date in any author-preferred format (e.g. 05-04-2026, 2026-04-05, April 5 2026)"
       },
       "sources_confirmed": {
         "type": "array",
@@ -56,6 +57,28 @@
           }
         }
       },
+      "displayStyle": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "color": {
+            "type": "string",
+            "description": "Semantic name (primary, secondary, success, warning, error, neutral) or hex (#RRGGBB)"
+          },
+          "accent": { "type": "string" },
+          "variant": { "type": "string" },
+          "highlight": { "type": "boolean" }
+        }
+      },
+      "contextField": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        ]
+      },
       "section": {
         "oneOf": [
           { "$ref": "#/$defs/bulletListSection" },
@@ -69,7 +92,7 @@
       },
       "baseSection": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["id", "type", "title", "items"],
         "properties": {
           "id": {
@@ -85,6 +108,12 @@
           },
           "description": {
             "type": "string"
+          },
+          "layout": { "type": "string" },
+          "columns": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6
           },
           "items": {
             "type": "array"
@@ -191,64 +220,88 @@
       },
       "bulletItem": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["text"],
         "properties": {
           "text": { "type": "string", "minLength": 1 },
-          "note": { "type": "string" }
+          "note": { "type": "string" },
+          "color": { "type": "string" },
+          "accent": { "type": "string" },
+          "variant": { "type": "string" },
+          "highlight": { "type": "boolean" }
         }
       },
       "cardItem": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["title", "description"],
         "properties": {
           "category": { "type": "string" },
           "title": { "type": "string", "minLength": 1 },
           "description": { "type": "string", "minLength": 1 },
           "cta_label": { "type": "string" },
-          "cta_url": { "type": "string", "format": "uri" }
+          "cta_url": { "type": "string", "format": "uri" },
+          "context": { "$ref": "#/$defs/contextField" },
+          "contexts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "color": { "type": "string" },
+          "accent": { "type": "string" },
+          "variant": { "type": "string" },
+          "highlight": { "type": "boolean" }
         }
       },
       "linkItem": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["label", "url"],
         "properties": {
           "label": { "type": "string", "minLength": 1 },
           "url": { "type": "string", "format": "uri" },
-          "source": { "type": "string" }
+          "source": { "type": "string" },
+          "color": { "type": "string" }
         }
       },
       "timelineItem": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["text"],
         "properties": {
           "date": { "type": "string" },
-          "text": { "type": "string", "minLength": 1 }
+          "text": { "type": "string", "minLength": 1 },
+          "color": { "type": "string" }
         }
       },
       "quoteItem": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["quote"],
         "properties": {
           "quote": { "type": "string", "minLength": 1 },
           "speaker": { "type": "string" },
-          "role": { "type": "string" }
+          "role": { "type": "string" },
+          "color": { "type": "string" }
         }
       },
       "statItem": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["label", "value"],
         "properties": {
           "label": { "type": "string", "minLength": 1 },
           "value": {
-            "type": ["string", "number"]
+            "type": ["string", "number", "boolean"]
           },
-          "context": { "type": "string" }
+          "context": { "$ref": "#/$defs/contextField" },
+          "contexts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "color": { "type": "string" },
+          "accent": { "type": "string" },
+          "variant": { "type": "string" },
+          "highlight": { "type": "boolean" }
         }
       },
       "contentBlock": {
@@ -262,52 +315,65 @@
       },
       "bulletBlock": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["kind", "text"],
         "properties": {
           "kind": { "const": "bullet" },
-          "text": { "type": "string", "minLength": 1 }
+          "text": { "type": "string", "minLength": 1 },
+          "color": { "type": "string" }
         }
       },
       "textBlock": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["kind", "text"],
         "properties": {
           "kind": { "const": "text" },
-          "text": { "type": "string", "minLength": 1 }
+          "text": { "type": "string", "minLength": 1 },
+          "color": { "type": "string" }
         }
       },
       "linkBlock": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["kind", "label", "url"],
         "properties": {
           "kind": { "const": "link" },
           "label": { "type": "string", "minLength": 1 },
-          "url": { "type": "string", "format": "uri" }
+          "url": { "type": "string", "format": "uri" },
+          "color": { "type": "string" }
         }
       },
       "statBlock": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["kind", "label", "value"],
         "properties": {
           "kind": { "const": "stat" },
           "label": { "type": "string", "minLength": 1 },
           "value": {
-            "type": ["string", "number"]
-          }
+            "type": ["string", "number", "boolean"]
+          },
+          "context": { "$ref": "#/$defs/contextField" },
+          "contexts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "color": { "type": "string" },
+          "accent": { "type": "string" },
+          "variant": { "type": "string" },
+          "highlight": { "type": "boolean" }
         }
       },
       "quoteBlock": {
         "type": "object",
-        "additionalProperties": false,
+        "additionalProperties": true,
         "required": ["kind", "quote"],
         "properties": {
           "kind": { "const": "quote" },
           "quote": { "type": "string", "minLength": 1 },
-          "speaker": { "type": "string" }
+          "speaker": { "type": "string" },
+          "color": { "type": "string" }
         }
       }
     }

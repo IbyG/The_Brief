@@ -1,5 +1,4 @@
 {
-  "rank": 1,
   "headline": "Minimal story frame",
   "sections": [
     {
@@ -7,7 +6,8 @@
       "type": "bullet_list",
       "title": "Key points",
       "items": [
-        { "text": "Only rank, headline, and sections are required at the root." },
+        { "text": "Only headline and sections are required. rank and date_confirmed are optional." },
+        { "text": "Use <b>bold</b>, <i>italic</i>, <u>underline</u>, or [warning]colored[/warning] text in any field." },
         { "text": "Each section needs id, type, title, and items." }
       ]
     }

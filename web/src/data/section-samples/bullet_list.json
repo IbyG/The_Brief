@@ -2,10 +2,17 @@
   "id": "sample-bullet-list",
   "type": "bullet_list",
   "title": "Key Takeaways",
-  "description": "Optional section description shown in some layouts.",
+  "description": "Optional section description. Use <b>bold</b>, <i>italic</i>, or [primary]colored[/primary] text anywhere.",
   "items": [
-    { "text": "Prioritize editorial clarity so readers grasp the core story fast." },
-    { "text": "Use tonal background shifts to separate beats without heavy chrome." },
-    { "text": "Incorporate primary coral (#ac2b31) for emphasis and hierarchy." }
+    {
+      "text": "Prioritize <b>editorial clarity</b> so readers grasp the core story fast."
+    },
+    {
+      "text": "Use [primary]primary coral[/primary] for emphasis and hierarchy.",
+      "note": "Notes support inline styling too: <i>tone</i> and __underline__ via markdown."
+    },
+    {
+      "text": "Highlight [error]blockers[/error] inline without changing the whole card color."
+    }
   ]
 }

@@ -10,7 +10,9 @@
         {
           "category": "Guide",
           "title": "Authoring Story Frames",
-          "description": "Cards pair a title with body copy; category and CTAs are optional.",
+          "description": "Cards pair a title with body copy. Add contexts, color, category, and CTAs as needed.",
+          "contexts": ["Flexible schema", "No code changes for new layouts"],
+          "color": "primary",
           "cta_label": "Open docs",
           "cta_url": "https://example.com/docs/story-frame"
         },
@@ -18,6 +20,8 @@
           "category": "Reference",
           "title": "JSON Schema",
           "description": "URIs must be valid for cta_url and link items.",
+          "color": "neutral",
+          "variant": "outline",
           "cta_label": "Schema",
           "cta_url": "https://json-schema.org/"
         }

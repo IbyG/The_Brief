@@ -7,11 +7,15 @@
     "date": "dd/mm/yyyy",
     "time": "hh:mm:ss",
     "tags": "",
-    "required": ["rank", "headline", "sections"],
+    "required": ["headline", "sections"],
     "properties": {
       "rank": {
-        "type": "integer",
-        "minimum": 1
+        "description": "Optional display order (lower numbers appear first). Omit or leave empty if not needed.",
+        "oneOf": [
+          { "type": "integer", "minimum": 1 },
+          { "type": "null" },
+          { "type": "string", "maxLength": 0 }
+        ]
       },
       "headline": {
         "type": "string",
@@ -19,7 +23,7 @@
       },
       "date_confirmed": {
         "type": "string",
-        "format": "date"
+        "description": "Display date in any author-preferred format (e.g. 05-04-2026, 2026-04-05, April 5 2026)"
       },
       "sources_confirmed": {
         "type": "array",

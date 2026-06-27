@@ -1,14 +1,14 @@
 {
   "rank": 1,
   "headline": "Schema showcase — every root field, section type, and item option",
-  "date_confirmed": "2026-04-05",
+  "date_confirmed": "05 April 2026",
   "sources_confirmed": [
     "https://example.com/strategy/2026",
     "https://example.com/datawarehouse/marts-revenue",
     "https://example.com/legal/dpa-template",
     "https://example.com/engineering/rfcs/rfc-042"
   ],
-  "summary": "Kitchen-sink example aligned with JSON_Schema.json: required fields (rank, headline, sections) plus optional date_confirmed, sources_confirmed, summary, and meta. Sections demonstrate bullet_list (text + optional note), cards (category, title, description, cta_label, cta_url), timeline (date optional), quotes (speaker, role), stats (string or number value, context), links (label, url, source), and generic blocks (bullet, text, link, stat, quote). Meta uses documented keys plus extra keys allowed by additionalProperties.",
+  "summary": "Kitchen-sink example: only headline and sections are required. Optional rank, flexible date_confirmed, sources_confirmed, summary, and meta. Sections show bullets, cards (with contexts/color), timeline (any date format), quotes, stats (contexts, colors, columns, booleans), links, and generic blocks.",
   "meta": {
     "topic": "Cross-functional program",
     "audience": "C-suite, product, eng, legal",
@@ -75,8 +75,8 @@
       "type": "timeline",
       "title": "Decision log",
       "items": [
-        { "date": "2026-02-01", "text": "Steering committee approved EU-first rollout." },
-        { "date": "2026-03-10", "text": "Architecture review: approve dual-write phase." },
+        { "date": "01 Feb 2026", "text": "Steering committee approved EU-first rollout." },
+        { "date": "10-03-2026", "text": "Architecture review: approve dual-write phase." },
         { "text": "Pending: finalize comms date with marketing (no fixed date yet)." }
       ]
     },
@@ -104,12 +104,36 @@
       "id": "scoreboard",
       "type": "stats",
       "title": "Scoreboard",
+      "columns": 2,
       "items": [
-        { "label": "ARR at risk (EU)", "value": "$1.2M", "context": "if slip > 60 days" },
-        { "label": "Engineering headcount allocated", "value": "18", "context": "FTE" },
-        { "label": "Migration progress", "value": "34%", "context": "by row count" },
-        { "label": "Open P0 blockers", "value": "1" },
-        { "label": "Estimated weeks to GA", "value": 11.5, "context": "Monte Carlo p50" }
+        {
+          "label": "ARR at risk (EU)",
+          "value": "$1.2M",
+          "contexts": ["if slip > 60 days", "Legal review pending"],
+          "color": "warning"
+        },
+        {
+          "label": "Engineering headcount allocated",
+          "value": "18",
+          "contexts": ["FTE", "Includes platform team"]
+        },
+        {
+          "label": "Migration progress",
+          "value": "34%",
+          "context": "by row count",
+          "color": "secondary"
+        },
+        {
+          "label": "Open P0 blockers",
+          "value": 1,
+          "color": "error",
+          "highlight": true
+        },
+        {
+          "label": "Estimated weeks to GA",
+          "value": 11.5,
+          "contexts": ["Monte Carlo p50", "Assumes no new scope"]
+        }
       ]
     },
     {
@@ -145,8 +169,8 @@
         },
         { "kind": "bullet", "text": "Hypothesis: dual-write window stays under four weeks if freeze discipline holds." },
         { "kind": "bullet", "text": "Risk: vendor API rate limits during backfill." },
-        { "kind": "stat", "label": "Backfill throughput (rows/s)", "value": "18500" },
-        { "kind": "stat", "label": "Throttle headroom", "value": "22%" },
+        { "kind": "stat", "label": "Backfill throughput (rows/s)", "value": "18500", "contexts": ["Peak observed", "EU region"], "color": "primary" },
+        { "kind": "stat", "label": "Throttle headroom", "value": "22%", "color": "warning" },
         {
           "kind": "link",
           "label": "Runbook: backfill",
