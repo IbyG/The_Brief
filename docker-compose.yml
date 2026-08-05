@@ -4,7 +4,7 @@ services:
       context: ./web
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3452:3000"
     environment:
       BRIEF_DATA_DIR: /data
     volumes:
