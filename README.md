@@ -1,6 +1,6 @@
 # The Brief
 
-**The Brief** is a single web dashboard that replaces a fragmented morning routine: instead of opening several tools or scripts to see what matters, you open one place and get a consistent, prioritised, editorial-style feed of structured updates. It reads validated JSON “story frames” from a folder on disk (no database in v1), renders a central feed and story views, and includes templating tools so authors can validate JSON before it ever hits `/data`.
+**The Brief** is a single web dashboard that replaces a fragmented morning routine: instead of opening several tools or scripts to see what matters, you open one place and get a consistent, prioritised, editorial-style feed of structured updates. It reads validated JSON “story frames” from a folder on disk (no database in v1), renders a central feed and story views, and includes templating tools so authors can validate JSON before it ever hits `/data`. External apps can also push Story Frames via `POST /api/create`.
 
 **Link to project:** run it locally and open [http://localhost:3000](http://localhost:3000) after `docker compose up` or `npm run dev` from `web/` (see [Quick start](#quick-start)). 
 
@@ -10,15 +10,15 @@
 
 **Tech used:** TypeScript, React 19, Next.js 16 (App Router), Tailwind CSS, AJV (JSON Schema draft 2020-12), Docker.
 
-The app is intentionally **filesystem-first**: producers drop `*.json` Story Frame files into a configured data directory (`BRIEF_DATA_DIR`, default `/data` in Docker or `web/data` in dev). The server loads and validates each file against a shared schema, skips bad files without crashing the page, and sorts stories by `rank`, then filename, then modification time. The UI follows an **Editorial Stream** design system—calm typography, card-based feed, sticky header with date navigation, tag filtering, and a templating page where you paste JSON and get schema errors and a live preview.
+The app is intentionally **filesystem-first**: producers drop `*.json` Story Frame files into a configured data directory (`BRIEF_DATA_DIR`, default `/data` in Docker or `web/data` in dev), or push them with `POST /api/create`. The server loads and validates each file against a shared schema, skips bad files without crashing the page, and sorts stories by `rank`, then filename, then modification time. The UI follows an **Editorial Stream** design system—calm typography, card-based feed, sticky header with date navigation, tag filtering, and a templating page where you paste JSON and get schema errors and a live preview.
 
 Routes that matter today: **Stories** (`/`) for the feed, **Story** (`/s/[filename]`) for the full article, **Templating** (`/templating`) for validate-and-preview. **Archive** and **Insights** are placeholder screens reserved for later persistence and analytics.
 
-**APIs:** `GET /api/briefs` exposes the same ingest shape the server uses for the feed; `POST /api/validate` powers the templating workflow. Full route and env details live in **[web/README.md](web/README.md)**.
+**APIs:** `GET /api/briefs` exposes the same ingest shape the server uses for the feed; `POST /api/validate` powers the templating workflow; `POST /api/create` validates and writes a Story Frame into the data directory. Full route and env details live in **[web/README.md](web/README.md)**.
 
 ### Architecture (at a glance)
 
-End-to-end flow: an external process writes Story Frame JSON into the data folder; the Next.js app reads those files and renders the dashboard.
+End-to-end flow: an external process writes Story Frame JSON into the data folder (file drop or `POST /api/create`); the Next.js app reads those files and renders the dashboard.
 
 ![Architecture flow: External app → JSON → /data → The Brief UI](docs/readme/assets/the-brief-architecture-flow.png)
 
@@ -51,7 +51,7 @@ You also have the ability to add predefined content blocks by clicking on "Selec
 
 - **Resilient ingest:** invalid JSON is isolated per file—one bad export does not take down the whole feed; users see ingest notifications instead of a blank app.
 - **Validation at the edge of trust:** AJV validates against a single JSON Schema so the UI and APIs agree on what “valid” means.
-- **Deployable v1:** Docker Compose builds a reproducible image; data is a mounted volume so you can refresh briefs without rebuilding.
+- **Deployable v1:** Docker Compose builds a reproducible image; data is a mounted writable volume so you can refresh briefs (file drop or `POST /api/create`) without rebuilding.
 - **Hero image:** the PNG under `docs/readme/assets/` can be re-exported or run through a lossy optimiser (e.g. `pngquant`) if you want a smaller clone for contributors.
 
 ---

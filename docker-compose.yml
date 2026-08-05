@@ -8,5 +8,5 @@ services:
     environment:
       BRIEF_DATA_DIR: /data
     volumes:
-      # Host folder with Story Frame *.json files (see PRD)
-      - ./web/data:/data:ro
+      # Host folder with Story Frame *.json files (see PRD); writable for POST /api/create
+      - ./web/data:/data
