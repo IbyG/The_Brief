@@ -14,7 +14,7 @@ The app is intentionally **filesystem-first**: producers drop `*.json` Story Fra
 
 Routes that matter today: **Stories** (`/`) for the feed, **Story** (`/s/[filename]`) for the full article, **Templating** (`/templating`) for validate-and-preview. **Archive** and **Insights** are placeholder screens reserved for later persistence and analytics.
 
-**APIs:** `GET /api/briefs` exposes the same ingest shape the server uses for the feed; `POST /api/validate` powers the templating workflow; `POST /api/create` validates and writes a Story Frame into the data directory. Full route and env details live in **[web/README.md](web/README.md)**.
+**APIs:** `GET /api/briefs` exposes the same ingest shape the server uses for the feed; `POST /api/validate` powers the templating workflow; `POST /api/create` validates and writes a Story Frame into the data directory. Full route docs live in **[docs/api/](docs/api/README.md)**; env details also in **[web/README.md](web/README.md)**.
 
 ### Architecture (at a glance)
 
@@ -67,6 +67,7 @@ Building a **read-only dashboard** on top of flat files forces clear contracts: 
 | Path | Purpose |
 |------|---------|
 | `web/` | Next.js app — the runnable product. |
+| `docs/api/` | HTTP API reference (`/api/briefs`, `/api/validate`, `/api/create`). |
 | `Documentation_References/` | PRD, UI notes, JSON schema and examples. |
 | `docs/readme/assets/` | README images (hero, architecture flow diagram, optional UI screenshots). |
 
