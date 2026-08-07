@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useRef } from "react";
-import { isoDateTodayUtc } from "@/lib/daily-brief";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { isoDateTodayLocal } from "@/lib/daily-brief";
 
 function formatLabel(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
@@ -27,8 +27,24 @@ export function HeaderDate() {
     if (raw && /^\d{4}-\d{2}-\d{2}$/.test(raw)) {
       return raw;
     }
-    return isoDateTodayUtc();
+    return isoDateTodayLocal();
   }, [searchParams]);
+
+  /*
+   * Server default “today” is UTC; the browser may already be on the next local day
+   * (e.g. AEST morning while GMT is still yesterday). Put the viewer’s local day in
+   * the URL so SSR feed loading matches the header label.
+   */
+  useEffect(() => {
+    const raw = searchParams.get("date");
+    if (raw && /^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+      return;
+    }
+    const next = new URLSearchParams(searchParams.toString());
+    next.set("date", isoDateTodayLocal());
+    const q = next.toString();
+    router.replace(q ? `${pathname}?${q}` : pathname);
+  }, [pathname, router, searchParams]);
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

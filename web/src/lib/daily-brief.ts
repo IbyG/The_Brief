@@ -24,7 +24,17 @@ export function isoDateFromBriefFilename(filename: string): string | null {
   return `${y}-${mo}-${d}`;
 }
 
+/** Calendar day in UTC (`YYYY-MM-DD`). Used for server/API defaults. */
 export function isoDateTodayUtc(): string {
+  const now = new Date();
+  const y = now.getUTCFullYear();
+  const mo = String(now.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(now.getUTCDate()).padStart(2, "0");
+  return `${y}-${mo}-${d}`;
+}
+
+/** Calendar day in the runtime’s local timezone (`YYYY-MM-DD`). */
+export function isoDateTodayLocal(): string {
   const now = new Date();
   const y = now.getFullYear();
   const mo = String(now.getMonth() + 1).padStart(2, "0");
